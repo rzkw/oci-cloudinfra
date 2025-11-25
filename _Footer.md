@@ -1,5 +1,3 @@
----
-
 ## 📬 Contact & Feedback
 
 **Questions or suggestions?** Feel free to open an issue or reach out:
