@@ -6,18 +6,18 @@ A secure, production-ready Oracle Cloud Infrastructure setup featuring a private
 
 ## Quick Navigation
 
-* [Getting Started](#getting)
-* [Architecture Overview](https://github.com/rzkw/oci-cloudinfra/wiki/architecture)
-* [Security & IAM](https://github.com/rzkw/oci-cloudinfra/wiki/security-iam)
-* [How-To Guides](https://github.com/rzkw/oci-cloudinfra/wiki/how-to)
-* [Troubleshooting](https://github.com/rzkw/oci-cloudinfra/wiki/troubleshooting)
-* [Business Impact](https://github.com/rzkw/oci-cloudinfra/wiki/business-impact)
-* [References](https://github.com/rzkw/oci-cloudinfra/wiki/references)
+* [Getting Started](#getting-started)
+* [Architecture Overview](#architecture-overview)
+* [Security & IAM](#security--iam)
+* [How To Guides](#how-to-guides)
+* [Troubleshooting](#troubleshooting)
+* [Business Impact](#business-impact)
+* [References](#references)
 
 Project Status: ⚠️ Building \
 Last Updated: November 2025
 
----
+
 ## Getting Started
 
 This project demos a small but secure, isolated cloud infrastructure on Oracle Cloud using industry standard best practices: network segmentation and identity/access management (IAM). Practical use cases for this setup include a test environment for a dev agency, students learning IT/Computer Science and e-commerce business inventory/analytics.
@@ -35,7 +35,17 @@ This project demos a small but secure, isolated cloud infrastructure on Oracle C
 * Oracle Cloud Infrastructure account (Free Tier or Pay As You Go)
 * An understanding of networking fundamentals (CIDR blocks, subnets, routing)
 * Some familiarity with the Linux command line
----
+
+## Architecture Overview
+## Security & IAM
+## How To Guides
+## Troubleshooting
+## Business Impact
+## References
+
+* [Best Practices for Your Compute Instances](https://docs.oracle.com/en-us/iaas/Content/Compute/References/bestpracticescompute.htm#three)
+* [Use Bastion service to access resources in a private subnet](https://docs.oracle.com/en/solutions/use-bastion-service/index.html)
+* [OCI Networking Best Practices - Part One - OCI Network Design, VCN, and Subnets](https://www.ateam-oracle.com/post/oci-networking-best-practices-recommendations-and-tips---part-one---general-oci-networking)
 
 ## 📝 License & Disclaimer
 
