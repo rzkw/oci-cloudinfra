@@ -16,3 +16,25 @@ A secure, production-ready Oracle Cloud Infrastructure setup featuring a private
 
 Project Status: ⚠️ Building \
 Last Updated: November 2025
+
+---
+
+## 📝 License & Disclaimer
+
+This documentation is provided for educational and reference purposes. 
+
+Oracle Cloud Infrastructure®, Oracle®, and related trademarks are property of Oracle Corporation and/or its affiliates. This project is not affiliated with or endorsed by Oracle Corporation.
+
+**Use at your own risk.** Always test in non-production environments first and follow your organization's security policies.
+
+---
+
+## 🏷️ Tags
+
+`oracle-cloud` `oci` `infrastructure` `bastion` `security` `iam` `networking` `cloud-architecture` `labs`
+
+---
+
+**Maintained by:** [@rzkw](https://github.com/rzkw) | Built with ☕ at home
+
+---
