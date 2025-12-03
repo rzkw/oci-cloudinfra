@@ -6,13 +6,13 @@ A secure, production-ready Oracle Cloud Infrastructure setup featuring a private
 
 ## Quick Navigation
 
-* [Getting Started](https://github.com/rzkw/oci-cloudinfra/wiki/_new#getting-started)
-* [Architecture Overview](https://github.com/rzkw/oci-cloudinfra/wiki/_new#architecture)
-* [Security & IAM](https://github.com/rzkw/oci-cloudinfra/wiki/_new#security-iam)
-* [How-To Guides](https://github.com/rzkw/oci-cloudinfra/wiki/_new#how-to)
-* [Troubleshooting](https://github.com/rzkw/oci-cloudinfra/wiki/_new#troubleshooting)
-* [Business Impact](https://github.com/rzkw/oci-cloudinfra/wiki/_new#business-impact)
-* [References](https://github.com/rzkw/oci-cloudinfra/wiki/_new#references)
+* [Getting Started](https://github.com/rzkw/oci-cloudinfra/wiki/Getting-Started)
+* [Architecture Overview](https://github.com/rzkw/oci-cloudinfra/wiki/architecture)
+* [Security & IAM](https://github.com/rzkw/oci-cloudinfra/wiki/security-iam)
+* [How-To Guides](https://github.com/rzkw/oci-cloudinfra/wiki/how-to)
+* [Troubleshooting](https://github.com/rzkw/oci-cloudinfra/wiki/troubleshooting)
+* [Business Impact](https://github.com/rzkw/oci-cloudinfra/wiki/business-impact)
+* [References](https://github.com/rzkw/oci-cloudinfra/wiki/references)
 
 Project Status: ⚠️ Building \
 Last Updated: November 2025
