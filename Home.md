@@ -11,6 +11,12 @@ Welcome to the oci-cloudinfra wiki!
 ## Project Overview
 A secure, production-ready Oracle Cloud Infrastructure setup featuring a private Virtual Cloud Network (VCN) with Bastion-based access control and cross-domain IAM policies.
 
+Why OCI? I chose this architecture to demonstrate Defense-in-Depth. While a Public Subnet layout is cheaper ($0 for NAT), it creates a 'hard shell, soft center' network. By moving the workload to a Private Subnet, we ensure that a misconfigured firewall rule doesn't immediately result in a data breach. In a real SMB scenario, the $37/month premium for a NAT Gateway is negligible compared to the $100k+ cost of a compromise.
+
+OCI is the clear financial winner for a portfolio project ($0 vs $158).
+
+AWS/Azure are the winners for reliability. (OCI Free Tier often hits "Out of Capacity" errors when you try to create the instance).
+
 
 ## Quick Navigation
 
@@ -20,6 +26,7 @@ A secure, production-ready Oracle Cloud Infrastructure setup featuring a private
 * [How To Guides](#how-to-guides)
 * [Troubleshooting](#troubleshooting)
 * [Business Impact](#business-impact)
+* [Use Cases](#use-cases)
 * [References](#references)
 
 Project Status: ⚠️ Building \
@@ -172,7 +179,7 @@ Before proceeding, verify your new admin user can access Comp-1 resources.
 
 1. Logout from Default domain: Click your profile icon (top-right), select Sign Out
 
-2. Login as domain-dev admin: Go to https://cloud.oracle.com → Click Sign In → Domain: select domain-dev from dropdown → Username: rizky → Password: use password from email (you'll be prompted to change it)
+2. Login as domain-dev admin: Go to https://cloud.oracle.com → Click Sign In → Domain: select domain-dev from dropdown → Username: admin → Password: use password from email (you'll be prompted to change it)
 
 
 3. Verify access to Comp-1: click ☰ menu → Identity & Security → Compartments. You should see: Comp-1 listed; can click into Comp-1 details; cannot see hello17 compartment details (expected)
@@ -205,7 +212,7 @@ Allow group 'Default'/'Administrators' to manage all-resources in compartment he
 #### End of Phase 1 checklist:
 
 - [ ] Operational compartment (Comp-1)
-- [ ] Operational identity domain (domain-dev) with admin user (rizky)
+- [ ] Operational identity domain (domain-dev) with admin user (admin)
 - [ ] Cross-domain policies granting proper access
 - [ ] Tested and verified access works
 - [ ] Restricted root access for security
@@ -303,31 +310,23 @@ Now we create the actual server (VM) in the private subnet. We'll use Always Fre
 
 1. Click ☰ menu → Compute → Instances → click Create instance 
 
-Configure: 
-FieldValueNamevm-1CompartmentComp-1TagsResourceType: ComputeCostCenter: OperationsEnvironment: ProductionOwner: domain-devBackupPolicy: DailyCriticality: High
-Tags Required - enables:
-
-Cost allocation and chargeback
-Automated backup scheduling
-Security compliance tracking
-Disaster recovery prioritization
-
-2. Configure placement: Availability Domain: leave default; Fault Domain: let Oracle choose (default)
-
-3. Image: Change Image → click Ubuntu, scroll down to pick 22.04 or latest → click Select Image
-
-4. Shape: Change shape → Select Virtual Machine → Shape series: Select Ampere → Select VM.Standard.A1.Flex then small arrow next to VM name → Number of OCPUs: 4 → Amount of memory (GB): 24 → click Select Shape.
-
-5. Security: Enable Shielded instance
-
-6. Networking: 
-
-- Primary VNIC: VNIC-1 → Primary network: Select existing virtual cloud network → Virtual cloud network compartment: Comp-1 → Virtual cloud network: vcn-1
-Subnet: Select existing subnet → Subnet compartment: Comp-1 → Subnet: private-subnet-1 (regional) 
-
-- Private IPv4 address assignment: Automatically assign private IPv4 address 
-
-- Add SSH keys: Generate a key pair for me (recommended for beginners) → click Download private Key and Download public key. IMPORTANT: Store these files securely - you can't download them again!
+- Name: vm-1
+- Compartment: Comp-1
+- Placement: Availability Domain: leave default; Fault Domain: let Oracle choose 
+- Image: Change Image → click Ubuntu, scroll down to pick 22.04 or latest → click Select Image
+- Shape: Change shape → Select Virtual Machine → Shape series: Select Ampere → Select VM.Standard.A1.Flex then small arrow next to VM name → Number of OCPUs: 4 → Amount of memory (GB): 24 → click Select Shape.
+- Tags:
+    - ResourceType: Compute
+    - CostCenter: Operations
+    - Environment: Production
+    - Owner: domain-dev
+    - BackupPolicy: Daily
+    - Criticality: High
+- Security: Enable Shielded instance
+- Networking: 
+    - Primary VNIC: VNIC-1 → Primary network: Select existing virtual cloud network → Virtual cloud network compartment: Comp-1 → Virtual cloud network: vcn-1 → Subnet: Select existing subnet → Subnet compartment: Comp-1 → Subnet: private-subnet-1 (regional) 
+    - Private IPv4 address assignment: Automatically assign private IPv4 address 
+    - Add SSH keys: Generate a key pair for me (recommended for beginners) → click Download private Key and Download public key. IMPORTANT: Store these files securely - you can't download them again!
 
 - Storage: In Boot volume, click Specify a custom boot volume size and performance setting → Boot volume size (GB): 200 → check Use in-transit encryption. Leave other options default
 
@@ -420,6 +419,16 @@ sudo apt update && sudo apt upgrade
 ## Expansion
 
 - Adding more team members 
+- Adding compartments and groups
+- Automatically starting/stopping instances
+    - OCI doesn't allow for scheduled start/stop of an instance through a built-in feature. Admin has to install OCI CLI on the instance and schedule a task using a systemd timer/cron job. 
+
+    For example:
+
+    ```
+    oci compute instance action --action STOP --instance-id
+    oci compute instance action --action START --instance-id
+    ```
 
 ## Troubleshooting
 
@@ -433,6 +442,40 @@ The VCN, subnetting and IAM structures are scalable, allowing a business to mana
 OCI also provides single-sign on (SSO) using third-party applications, for businesses that may prefer using other providers to login to their OCI-based resources. 
 
 IAM access and policies can also minimise accidental (or intentional) misconfigurations, preventing budget blowouts and access to malicious bad actors. This guide uses Always Free resources when possible, but similar configurations on AWS and Azure will likely cost more. 
+
+The following is a table comparing the cost of this exact setup on AWS and Azure:
+
+![Table of Cost Comparison - generated by Google Gemini](/cost.png)
+
+## Use Cases
+
+- The "Dev Shop" Build Server (Strongest Use Case)
+
+    Scenario: A 10-person software agency building apps for clients.
+
+    Why this setup: They need a powerful machine to compile code (CI/CD) and run "Docker-in-Docker" tests.
+
+    The "Why": Supply chain attacks are rising. If a developer’s laptop is hacked, the attacker shouldn't be able to pivot directly into the build server. The Bastion ensures that even if a dev key is stolen, the attacker still faces a network air-gap.
+
+- The "Legacy" Medical Image Server (DICOM)
+
+    Scenario: A specialized dental or radiology clinic with 15 employees.
+
+    Why this setup: They run legacy imaging software that cannot be moved to SaaS. It relies on an old database version that is vulnerable to public internet scans.
+
+    The "Why": Placing this legacy server in a Private Subnet effectively "cloaks" it from the internet. The NAT Gateway allows it to backup encrypted images to S3/Object Storage without ever accepting an incoming connection.
+
+- The Backend Order Processor (Not the Storefront)
+
+    Scenario: An e-commerce brand doing $5M/year.
+
+    Why this setup: They use Shopify for the storefront (Frontend) but have a custom Python/Java backend that processes complex returns, inventory syncing, and financial reporting.
+
+    The "Why": This backend holds PII (customer addresses) and financial data. It must be PCI-DSS compliant. Segregating it in a private network helps satisfy Requirement 1.3 of PCI-DSS ("Prohibit direct public access between the Internet and any system component in the cardholder data environment").
+
+
+    
+
 
 
 ## References
