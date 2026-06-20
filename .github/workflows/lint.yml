@@ -1,0 +1,44 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  terraform-fmt:
+    name: terraform-fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+      - run: terraform fmt -check -recursive terraform/
+
+  terraform-validate:
+    name: terraform-validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: latest
+      - name: Init and validate vcn
+        working-directory: terraform/vcn
+        run: |
+          terraform init -backend=false
+          terraform validate
+      - name: Init and validate instances
+        working-directory: terraform/instances
+        run: |
+          terraform init -backend=false
+          terraform validate
+
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - run: shellcheck --version
+      - run: shellcheck *.sh
