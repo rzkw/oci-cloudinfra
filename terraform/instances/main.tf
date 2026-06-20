@@ -36,8 +36,8 @@ module "instance_flex" {
   shape                       = var.shape
   source_ocid                 = var.source_ocid
   source_type                 = var.source_type
-  instance_flex_memory_in_gbs = var.instance_flex_memory_in_gbs # changed default to 8GB
-  instance_flex_ocpus         = var.instance_flex_ocpus         # changed default to 1
+  instance_flex_memory_in_gbs = 12
+  instance_flex_ocpus         = 2
   cloud_agent_plugins = {
     autonomous_linux       = "DISABLED"
     bastion                = "ENABLED"
@@ -57,9 +57,11 @@ module "instance_flex" {
   public_ip    = var.public_ip # NONE, RESERVED or EPHEMERAL
   subnet_ocids = var.subnet_ocids
 
+  # cloud-init
+  user_data = var.user_data_path != null ? base64encode(file(var.user_data_path)) : null
   # storage parameters
   boot_volume_backup_policy  = var.boot_volume_backup_policy
-  block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
+  block_storage_sizes_in_gbs = []
 }
 
 output "instance_flex" {
