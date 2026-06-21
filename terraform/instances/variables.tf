@@ -149,3 +149,17 @@ variable "block_storage_sizes_in_gbs" {
   type        = list(string)
   default     = [50]
 }
+
+# cloud-init parameters
+
+variable "tailscale_auth_key" {
+  description = "Tailscale pre-authentication key for joining the tailnet"
+  type        = string
+  sensitive   = true
+}
+
+variable "user_data_path" {
+  description = "Path to the cloud-init user_data script"
+  type        = string
+  default     = null
+}
