@@ -21,7 +21,8 @@ provider "oci" {
 # * This modified module will create a Flex Compute Instance within Always Free resources, using default values: 1 OCPU, 8 GB memory.
 
 module "instance_flex" {
-  source = "oracle-terraform-modules/compute-instance/oci"
+  source  = "oracle-terraform-modules/compute-instance/oci"
+  version = "2.4.1"
 
   # general oci parameters
   compartment_ocid = var.compartment_ocid
