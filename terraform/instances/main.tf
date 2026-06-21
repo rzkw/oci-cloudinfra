@@ -4,7 +4,7 @@ terraform {
   required_version = ">= 1.5"
   required_providers {
     oci = {
-      source = "oracle/oci"
+      source  = "oracle/oci"
       version = "8.2.0"
     }
   }
@@ -22,12 +22,12 @@ provider "oci" {
 
 module "instance_flex" {
   source = "oracle-terraform-modules/compute-instance/oci"
-  
+
   # general oci parameters
   compartment_ocid = var.compartment_ocid
   freeform_tags    = var.freeform_tags
   defined_tags     = var.defined_tags
- 
+
   # compute instance parameters
   ad_number                   = var.instance_ad_number
   instance_count              = var.instance_count
@@ -36,8 +36,8 @@ module "instance_flex" {
   shape                       = var.shape
   source_ocid                 = var.source_ocid
   source_type                 = var.source_type
-  instance_flex_memory_in_gbs = var.instance_flex_memory_in_gbs                     # changed default to 8GB
-  instance_flex_ocpus         = var.instance_flex_ocpus                             # changed default to 1
+  instance_flex_memory_in_gbs = var.instance_flex_memory_in_gbs # changed default to 8GB
+  instance_flex_ocpus         = var.instance_flex_ocpus         # changed default to 1
   cloud_agent_plugins = {
     autonomous_linux       = "DISABLED"
     bastion                = "ENABLED"
@@ -49,14 +49,14 @@ module "instance_flex" {
     monitoring             = "ENABLED"
     block_volume_mgmt      = "DISABLED"
   }
-  
+
   # operating system parameters
   ssh_public_keys = var.ssh_public_keys
-  
+
   # networking parameters
-  public_ip            = var.public_ip # NONE, RESERVED or EPHEMERAL
-  subnet_ocids         = var.subnet_ocids
-  
+  public_ip    = var.public_ip # NONE, RESERVED or EPHEMERAL
+  subnet_ocids = var.subnet_ocids
+
   # storage parameters
   boot_volume_backup_policy  = var.boot_volume_backup_policy
   block_storage_sizes_in_gbs = var.block_storage_sizes_in_gbs
