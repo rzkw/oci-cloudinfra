@@ -25,7 +25,7 @@ jobs:
           framework: terraform
           output_format: sarif
           output_file_path: checkov-results.sarif
-          soft_fail: true
+          soft_fail: false
 
       - name: Upload SARIF to GitHub
         if: always()
