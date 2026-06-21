@@ -132,7 +132,7 @@ variable "public_ip" {
 
 variable "subnet_ocids" {
   description = "OCID of subnet to create instance in"
-  type        = string
+  type        = list(string)
   default     = null
 }
 
