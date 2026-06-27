@@ -13,17 +13,7 @@ output "dev_subnet_ocid" {
   value       = oci_core_subnet.dev.id
 }
 
-output "prod_subnet_ocid" {
-  description = "OCID of the prod subnet"
-  value       = oci_core_subnet.prod.id
-}
-
 output "dev_subnet_cidr" {
   description = "CIDR of the dev subnet"
   value       = oci_core_subnet.dev.cidr_block
-}
-
-output "prod_subnet_cidr" {
-  description = "CIDR of the prod subnet"
-  value       = oci_core_subnet.prod.cidr_block
 }

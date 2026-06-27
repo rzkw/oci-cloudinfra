@@ -18,7 +18,7 @@ provider "oci" {
   region           = var.region
 }
 
-# * This modified module will create a Flex Compute Instance within Always Free resources, using default values: 1 OCPU, 8 GB memory.
+# * This modified module will create a Flex Compute Instance within Always Free resources, using: 2 OCPUs, 12 GB memory.
 
 module "instance_flex" {
   source = "git::https://github.com/oracle-terraform-modules/terraform-oci-compute-instance.git?ref=b19dbe063ab82529c9ef71c92d1472fba2d30595"
