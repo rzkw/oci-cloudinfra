@@ -39,7 +39,7 @@ resource "oci_core_route_table" "dev" {
   }
 }
 
-# Security list — only allow UDP 41641 inbound (Tailscale)
+# Security list — only allow UDP 41641 inbound (Tailscale) and SSH from home
 resource "oci_core_security_list" "internal" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_vcn.internal.id
@@ -51,8 +51,8 @@ resource "oci_core_security_list" "internal" {
   }
 
   ingress_security_rules {
-    protocol = "17" # UDP
-    source   = "0.0.0.0/0"
+    protocol = "17,22" # UDP + SSH from home only
+    source   = "103.154.138.8"
     udp_options {
       source_port_range {
         min = 41641
