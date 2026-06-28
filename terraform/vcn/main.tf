@@ -51,7 +51,7 @@ resource "oci_core_security_list" "internal" {
   }
 
   ingress_security_rules {
-    protocol = "17,22" # UDP + SSH from home only
+    protocol = "17" # UDP + SSH from home only
     source   = "103.154.138.8"
     udp_options {
       source_port_range {
