@@ -1,3 +1,7 @@
-.env
+*.env
+~/.oci/config
 do-not-upload/
 .DS_Store
+*.pem
+.tfvars
+.tfvars.json
