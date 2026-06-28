@@ -1,25 +1,3 @@
-// Copyright (c) 2018, 2021 Oracle and/or its affiliates
-
-terraform {
-  required_version = ">= 1.5"
-  required_providers {
-    oci = {
-      source  = "oracle/oci"
-      version = "8.2.0"
-    }
-  }
-}
-
-provider "oci" {
-  tenancy_ocid     = var.tenancy_ocid
-  user_ocid        = var.user_ocid
-  fingerprint      = var.fingerprint
-  private_key_path = var.private_key_path
-  region           = var.region
-}
-
-# * This modified module will create a Flex Compute Instance within Always Free resources, using: 2 OCPUs, 12 GB memory.
-
 module "instance_flex" {
   source = "git::https://github.com/oracle-terraform-modules/terraform-oci-compute-instance.git?ref=b19dbe063ab82529c9ef71c92d1472fba2d30595"
 

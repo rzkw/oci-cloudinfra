@@ -1,36 +1,7 @@
-# Copyright (c) 2019, 2021, Oracle Corporation and/or affiliates.
-# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl
-
-# provider identity parameters
-
-variable "fingerprint" {
-  description = "fingerprint of oci api private key"
-  type        = string
-  # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
-}
-
-variable "private_key_path" {
-  description = "path to oci api private key used"
-  type        = string
-  # no default value, asking user to explicitly set this variable's value. see codingconventions.adoc
-}
-
 variable "region" {
   description = "the oci region where resources will be created"
   type        = string
-  default     = null
-}
-
-variable "tenancy_ocid" {
-  description = "tenancy ocid where to create the sources"
-  type        = string
-  default     = null
-}
-
-variable "user_ocid" {
-  description = "ocid of user that terraform will use to create the resources"
-  type        = string
-  default     = null
+  default     = "ap-melbourne-1"
 }
 
 # general oci parameters
