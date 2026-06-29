@@ -1,0 +1,52 @@
+name: Terraform Docs
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  docs:
+    name: Generate and assemble module docs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Generate per-module READMEs
+        uses: terraform-docs/gh-actions@v1
+        with:
+          find-dir: terraform/
+          output-file: README.md
+          output-method: replace
+          git-push: false
+
+      - name: Assemble docs into root README
+        run: |
+          python3 << 'EOF'
+          import glob, os
+          for mod_readme in sorted(glob.glob('terraform/*/README.md')):
+              mod = os.path.basename(os.path.dirname(mod_readme))
+              with open(mod_readme) as f:
+                  content = f.read()
+              with open('README.md') as f:
+                  root = f.read()
+              marker_start = f'<!-- BEGIN_TF_DOCS {mod} -->'
+              marker_end = f'<!-- END_TF_DOCS {mod} -->'
+              si = root.find(marker_start)
+              ei = root.find(marker_end)
+              if si != -1 and ei != -1:
+                  si += len(marker_start)
+                  root = root[:si] + '\n' + content + '\n' + root[ei:]
+              with open('README.md', 'w') as f:
+                  f.write(root)
+              os.remove(mod_readme)
+          EOF
+
+      - name: Commit and push README
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add README.md
+          git diff --cached --quiet || git commit -m 'chore: auto-update module docs'
+          git push

@@ -78,13 +78,12 @@ creating a PR.
 
 - `.github/workflows/lint.yml` — runs on PR to `main`: fmt, validate
 - `.github/workflows/terraform-scan.yml` — Checkov scan on push/PR to main + weekly
+- `.github/workflows/terraform-docs.yml` — generates module docs on push to `main`, assembles into root `README.md`
 - `.github/dependabot.yml` — weekly terraform + GitHub Actions updates
 - `.github/CODEOWNERS` — `* @rzkw`, all PRs need review
 
 ## Known Issues (actively being worked on)
 
-- **Budget module**: `oci_budget_budget` resource is commented out; alert rules
-  reference it — module will fail if applied as-is.
 - **Provider version drift**: `vcn` and `budget` pin `oracle/oci ~> 8.20.0`,
   `instances` pins `~> 8.2.0`. Being unified.
 - **Remote module pinning**: Instances module uses git commit hash
