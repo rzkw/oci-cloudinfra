@@ -56,10 +56,14 @@ recommendations.
 
 Hooks: `terraform_fmt`, `terraform_validate`.
 
-Docs are auto-generated in CI via `terraform-docs/gh-actions` on every PR
-(see `.github/workflows/terraform-docs.yml`). Each module has a
-`.terraform-docs.yml` configuring sections: header, requirements, inputs,
-outputs, resources, footer.
+Module docs are auto-generated on merge to `main` via
+`.github/workflows/terraform-docs.yml`. The workflow:
+1. Runs `terraform-docs/gh-actions` with `find-dir` to generate per-module READMEs
+2. Assembles each module's docs into the root `README.md` between `<!-- BEGIN_TF_DOCS <module> -->` / `<!-- END_TF_DOCS <module> -->` markers
+3. Deletes per-module READMEs and commits the root `README.md` change only
+
+Each module has a `.terraform-docs.yml` configuring sections: header,
+requirements, inputs, outputs, resources, footer.
 
 ### Before creating a PR (for CI and uncommitted checks)
 
