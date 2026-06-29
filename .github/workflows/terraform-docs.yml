@@ -43,6 +43,14 @@ jobs:
               os.remove(mod_readme)
           EOF
 
+      - name: Import signing key and configure git
+        run: |
+          echo "${{ secrets.SSH_SIGNING_KEY }}" > ~/.ssh/ci_signing_key
+          chmod 600 ~/.ssh/ci_signing_key
+          git config gpg.format ssh
+          git config user.signingkey ~/.ssh/ci_signing_key
+          git config commit.gpgsign true
+
       - name: Commit and push README
         run: |
           git config user.name 'github-actions[bot]'
