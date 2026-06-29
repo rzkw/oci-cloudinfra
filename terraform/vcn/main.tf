@@ -1,7 +1,8 @@
 terraform {
   required_providers {
     oci = {
-      source = "oracle/oci"
+      source  = "oracle/oci"
+      version = "~> 8.20"
     }
   }
 }
@@ -51,13 +52,20 @@ resource "oci_core_security_list" "internal" {
   }
 
   ingress_security_rules {
-    protocol = "17" # UDP + SSH from home only
+    protocol = "6"
+    source   = "103.154.138.8"
+    tcp_options {
+      min = 22
+      max = 22
+    }
+  }
+
+  ingress_security_rules {
+    protocol = "17"
     source   = "103.154.138.8"
     udp_options {
-      source_port_range {
-        min = 41641
-        max = 41641
-      }
+      min = 41641
+      max = 41641
     }
   }
 }
