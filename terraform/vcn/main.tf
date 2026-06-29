@@ -55,10 +55,8 @@ resource "oci_core_security_list" "internal" {
     protocol = "6"
     source   = "103.154.138.8"
     tcp_options {
-      destination_port_range {
-        min = 22
-        max = 22
-      }
+      min = 22
+      max = 22
     }
   }
 
@@ -66,10 +64,8 @@ resource "oci_core_security_list" "internal" {
     protocol = "17"
     source   = "103.154.138.8"
     udp_options {
-      destination_port_range {
-        min = 41641
-        max = 41641
-      }
+      min = 41641
+      max = 41641
     }
   }
 }
