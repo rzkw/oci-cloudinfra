@@ -75,7 +75,7 @@ Expected output: JSON with bucket details including `name: "tfstate-oci-cloudinf
 - [ ] **Step 4: Retrieve namespace**
 
 ```bash
-OCI_NS=$(oci os ns get -r data)
+OCI_NS=$(oci os ns get --query data -r)
 echo "Namespace: $OCI_NS"
 ```
 
@@ -701,7 +701,7 @@ If something goes wrong at any point:
 
 ### Option A: Revert to local state
 
-1. Remove the `backend "oci" {}` block from each module's `terraform.tf`/`providers.tf`
+1. Remove the `backend "oci" {}` block from each module's `main.tf` (vcn) or `providers.tf` (instances, budget)
 2. Run `terraform init -migrate-state` — this pulls state back from OCI to local
 3. Delete the bucket if desired:
 
