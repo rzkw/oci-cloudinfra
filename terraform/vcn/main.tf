@@ -14,20 +14,20 @@ terraform {
 
 provider "oci" {
   region              = var.region
-  auth                = "SecurityToken"
+#  auth                = "SecurityToken"
   config_file_profile = "DEFAULT"
 }
 
 resource "oci_core_vcn" "internal" {
   dns_label      = "internal"
   cidr_block     = "172.16.0.0/20"
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   display_name   = "My internal VCN"
 }
 
 # Internet Gateway
 resource "oci_core_internet_gateway" "internal" {
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
   display_name   = "Internal Internet Gateway"
   enabled        = true
@@ -35,7 +35,7 @@ resource "oci_core_internet_gateway" "internal" {
 
 # Route table for dev subnet (public, via IGW)
 resource "oci_core_route_table" "dev" {
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
   display_name   = "Dev Route Table"
   route_rules {
@@ -47,7 +47,7 @@ resource "oci_core_route_table" "dev" {
 
 # Security list — only allow UDP 41641 inbound (Tailscale) and SSH from home
 resource "oci_core_security_list" "internal" {
-  compartment_id = var.compartment_id
+  compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
   display_name   = "Internal Security List"
 
@@ -58,7 +58,7 @@ resource "oci_core_security_list" "internal" {
 
   ingress_security_rules {
     protocol = "6"
-    source   = "103.154.138.8"
+    source   = "103.154.138.8/32"
     tcp_options {
       min = 22
       max = 22
@@ -67,7 +67,7 @@ resource "oci_core_security_list" "internal" {
 
   ingress_security_rules {
     protocol = "17"
-    source   = "103.154.138.8"
+    source   = "103.154.138.8/32"
     udp_options {
       min = 41641
       max = 41641
@@ -79,7 +79,7 @@ resource "oci_core_security_list" "internal" {
 resource "oci_core_subnet" "dev" {
   vcn_id                     = oci_core_vcn.internal.id
   cidr_block                 = "172.16.0.0/24"
-  compartment_id             = var.compartment_id
+  compartment_id             = var.compartment_ocid
   display_name               = "dev"
   prohibit_public_ip_on_vnic = true
   dns_label                  = "dev"
