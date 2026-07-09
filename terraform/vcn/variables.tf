@@ -1,4 +1,4 @@
-variable "compartment_id" {
+variable "compartment_ocid" {
   description = "OCID from your tenancy page"
   type        = string
 }
