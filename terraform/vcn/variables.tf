@@ -7,9 +7,3 @@ variable "region" {
   type        = string
   default     = "ap-melbourne-1"
 }
-
-# variable "protocol" {
-#   description = "protocol to allow ingress to VCN"
-#   type = 
-#   default = "6"
-# }

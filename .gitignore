@@ -3,5 +3,5 @@
 do-not-upload/
 .DS_Store
 *.pem
-.tfvars
+*.tfvars
 .tfvars.json

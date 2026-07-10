@@ -17,15 +17,16 @@ module "instance_flex" {
   instance_flex_memory_in_gbs = 12
   instance_flex_ocpus         = 2
   cloud_agent_plugins = {
-    autonomous_linux       = "DISABLED"
-    bastion                = "ENABLED"
-    vulnerability_scanning = "ENABLED"
-    osms                   = "ENABLED"
-    management             = "DISABLED"
-    custom_logs            = "ENABLED"
-    run_command            = "ENABLED"
-    monitoring             = "ENABLED"
-    block_volume_mgmt      = "DISABLED"
+    autonomous_linux        = "DISABLED"
+    bastion                 = "ENABLED"
+    vulnerability_scanning  = "ENABLED"
+    osms                    = "ENABLED"
+    management              = "DISABLED"
+    custom_logs             = "ENABLED"
+    run_command             = "ENABLED"
+    monitoring              = "ENABLED"
+    block_volume_mgmt       = "DISABLED"
+    java_management_service = "DISABLED"
   }
 
   # operating system parameters
