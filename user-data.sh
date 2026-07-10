@@ -497,6 +497,13 @@ log "========================================"
 
 export DEBIAN_FRONTEND=noninteractive
 
+# --- SSH authorized key (OCI rejects sk- keys via metadata) ---
+mkdir -p /home/ubuntu/.ssh
+chmod 700 /home/ubuntu/.ssh
+echo "sk-ssh-ed25519@openssh.com AAAAGnNrLXNzaC1lZDI1NTE5QG9wZW5zc2guY29tAAAAIISexvwI8oLz8pjXhleHklOreCoaV2LrQCsUUd/jojizAAAAC3NzaDpkZXYtYm94 dev-box" >> /home/ubuntu/.ssh/authorized_keys
+chmod 600 /home/ubuntu/.ssh/authorized_keys
+chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+
 apt-get update -y
 apt-get upgrade -y
 
