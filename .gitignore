@@ -5,3 +5,4 @@ do-not-upload/
 *.pem
 *.tfvars
 .tfvars.json
+.worktrees/
