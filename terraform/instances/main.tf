@@ -30,7 +30,7 @@ module "instance_flex" {
   }
 
   # operating system parameters
-  ssh_public_keys = var.ssh_public_keys
+  # ssh_public_keys = var.ssh_public_keys  # default is null — see user-data.sh for sk- key injection
 
   # networking parameters
   public_ip    = var.public_ip # NONE, RESERVED or EPHEMERAL
