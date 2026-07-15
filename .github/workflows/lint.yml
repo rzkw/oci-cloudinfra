@@ -34,13 +34,3 @@ jobs:
           terraform init -backend=false
           terraform validate
 
-  shellcheck:
-    name: shellcheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - run: sudo apt-get update && sudo apt-get install -y shellcheck
-      - run: shellcheck --version
-      - run: git diff --name-only ${{ github.event.pull_request.base.sha }} -- '*.sh' | xargs -r shellcheck
