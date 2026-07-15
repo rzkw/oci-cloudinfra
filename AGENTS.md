@@ -94,3 +94,7 @@ creating a PR.
 - **No `.tfvars` committed** (gitignored). Values come from environment or CI.
 - **VCN access**: SSH + Tailscale (UDP 41641) from home IP only.
 - Wiki docs in `wiki/` cover architecture, security, IAM, and cost.
+
+## Commit signing
+
+All commits must be signed with SSH key `~/.ssh/agent-gh-signing`. [PERSON_NAME] is configured globally (`gpg.format = ssh`, `user.signingkey = ~/.ssh/agent-gh-signing.pub`, `commit.gpgsign = true`). Verify with `git log --show-signature -1` before pushing.

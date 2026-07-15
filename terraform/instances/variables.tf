@@ -132,5 +132,5 @@ variable "tailscale_auth_key" {
 variable "user_data_path" {
   description = "Path to the cloud-init user_data script"
   type        = string
-  default     = null
+  default     = "user-data.yaml"
 }
