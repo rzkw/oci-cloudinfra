@@ -46,6 +46,9 @@ jobs:
               os.remove(mod_readme)
           EOF
 
+      - name: Fix .git ownership (terraform-docs runs as root)
+        run: sudo chown -R $(whoami) .git/
+
       - name: Import signing key and configure git
         run: |
           mkdir -p ~/.ssh
