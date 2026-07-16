@@ -444,7 +444,7 @@ git commit -S -m "feat(vcn): add OCI Object Storage backend for remote state"
 - Consumes: OCI CLI auth, compartment OCID; backend from Task 3
 - Produces: Instance resource imported into OCI-backed state; `terraform plan` shows no changes
 
-**Note:** The instance is created through the remote module at `module.instance_flex`. The import address must follow the module path: `module.instance_flex.oci_core_instance.instance[0]`.
+**Note:** The instance resource is `oci_core_instance.this[0]`.
 
 - [ ] **Step 1: Look up instance OCID**
 
@@ -477,11 +477,9 @@ Create file `terraform/instances/import.tf` with the import block. Replace `$INS
 ```hcl
 import {
   id = "$INSTANCE_ID"
-  to = module.instance_flex.oci_core_instance.instance[0]
+  to = oci_core_instance.this[0]
 }
 ```
-
-**Important:** The `to` address uses the module path because the instance is defined inside the remote `instance_flex` module. The module source is `git::https://github.com/oracle-terraform-modules/terraform-oci-compute-instance.git?ref=b19dbe0`.
 
 - [ ] **Step 4: Run plan with config generation**
 

@@ -47,13 +47,13 @@ variable "instance_display_name" {
 variable "instance_flex_memory_in_gbs" {
   type        = number
   description = "(Updatable) The total amount of memory available to the instance, in gigabytes."
-  default     = 8
+  default     = 12
 }
 
 variable "instance_flex_ocpus" {
   type        = number
   description = "(Updatable) The total number of OCPUs available to the instance."
-  default     = 1
+  default     = 2
 }
 
 variable "instance_state" {
@@ -117,8 +117,8 @@ variable "boot_volume_backup_policy" {
 
 variable "block_storage_sizes_in_gbs" {
   description = "Sizes of volumes to create and attach to each instance."
-  type        = list(string)
-  default     = [50]
+  type        = list(number)
+  default     = []
 }
 
 # cloud-init parameters
