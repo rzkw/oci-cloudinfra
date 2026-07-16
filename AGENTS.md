@@ -45,6 +45,10 @@ Three independent Terraform root modules — each has its own state:
 Each module has its own `providers.tf`, `variables.tf`, and `.terraform.lock.hcl`.
 Run commands per-module with `terraform -chdir=terraform/<module>`.
 
+## Git Rules
+
+- **Never force push.** Add new commits only. `git push --force` and `--force-with-lease` are forbidden on any branch. If a PR review requires changes, make a new commit and push normally.
+
 ## Required Workflow
 
 ### Pre-commit hooks (required)
