@@ -1,7 +1,7 @@
 name: Terraform Docs
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
 jobs:
@@ -10,8 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    if: github.actor != 'github-actions[bot]'
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Generate per-module READMEs
         uses: terraform-docs/gh-actions@v1
