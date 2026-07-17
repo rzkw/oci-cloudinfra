@@ -87,6 +87,7 @@ resource "oci_core_instance" "this" {
   metadata = {
     ssh_authorized_keys = var.ssh_public_keys != null ? var.ssh_public_keys : ""
     user_data           = var.user_data_path != null ? base64encode(file(var.user_data_path)) : null
+    tailscale_auth_key  = var.tailscale_auth_key
   }
 
   source_details {
