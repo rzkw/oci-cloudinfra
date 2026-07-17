@@ -27,10 +27,6 @@ resource "oci_core_instance" "this" {
     are_legacy_imds_endpoints_disabled = true
   }
 
-  launch_options {
-    is_pv_encryption_in_transit_enabled = true
-  }
-
   shape_config {
     memory_in_gbs = var.instance_flex_memory_in_gbs
     ocpus         = var.instance_flex_ocpus
@@ -94,8 +90,10 @@ resource "oci_core_instance" "this" {
   }
 
   source_details {
+    boot_volume_size_in_gbs = var.boot_volume_size_in_gbs
     source_id   = var.source_ocid
     source_type = var.source_type
+
   }
 
   freeform_tags = var.freeform_tags
