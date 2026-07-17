@@ -121,6 +121,12 @@ variable "block_storage_sizes_in_gbs" {
   default     = []
 }
 
+variable "boot_volume_size_in_gbs" {
+  description = "The size of the boot volume in GBs."
+  type        = number
+  default     = 50
+}
+
 # cloud-init parameters
 
 variable "tailscale_auth_key" {
