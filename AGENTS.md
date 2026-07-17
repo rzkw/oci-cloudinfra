@@ -47,7 +47,9 @@ Run commands per-module with `terraform -chdir=terraform/<module>`.
 
 ## Git Rules
 
-- **Never force push.** Add new commits only. `git push --force` and `--force-with-lease` are forbidden on any branch. If a PR review requires changes, make a new commit and push normally.
+- **Never force push.** `git push --force` and `--force-with-lease` are forbidden on any branch. Add new commits only.
+- **Always rebase, never merge.** Keep a linear history. Use `git pull --rebase` to incorporate upstream changes.
+- **Rebase before every push.** Rebasing onto the target branch before pushing avoids merge conflicts.
 
 ## Required Workflow
 
