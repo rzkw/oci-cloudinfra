@@ -20,8 +20,12 @@ jobs:
       pull-requests: read
       issues: read
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2.20.0
+        with:
+          egress-policy: audit
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
