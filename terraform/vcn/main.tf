@@ -85,3 +85,29 @@ resource "oci_core_subnet" "dev" {
   route_table_id             = oci_core_route_table.dev.id
   security_list_ids          = [oci_core_security_list.internal.id]
 }
+
+# Bastion — managed SSH access to the instance
+resource "oci_bastion_bastion" "this" {
+  count                        = var.target_instance_ocid != null ? 1 : 0
+  bastion_type                 = "standard"
+  compartment_id               = var.compartment_ocid
+  target_subnet_id             = oci_core_subnet.dev.id
+  client_cidr_block_allow_list = var.bastion_client_cidrs
+  name                         = "bastion-${oci_core_vcn.internal.display_name}"
+}
+
+resource "oci_bastion_session" "managed_ssh" {
+  count      = var.target_instance_ocid != null ? 1 : 0
+  bastion_id = oci_bastion_bastion.this[0].id
+  target_resource_details {
+    session_type                       = "MANAGED_SSH"
+    target_resource_id                 = var.target_instance_ocid
+    target_resource_private_ip_address = var.target_instance_private_ip
+    target_resource_port               = 22
+  }
+  key_details {
+    public_key_content = var.bastion_session_ssh_public_key
+  }
+  display_name           = "managed-ssh-vm"
+  session_ttl_in_seconds = 10800
+}
