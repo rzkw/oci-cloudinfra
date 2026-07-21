@@ -93,6 +93,13 @@ variable "ssh_public_keys" {
   default     = null
 }
 
+variable "tailscale_auth_key" {
+  description = "Tailscale pre-authentication key for joining the tailnet"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
 # networking parameters
 
 variable "public_ip" {
@@ -104,7 +111,6 @@ variable "public_ip" {
 variable "subnet_ocids" {
   description = "OCID of subnet to create instance in"
   type        = list(string)
-  #  default     = null
 }
 
 # storage parameters
@@ -128,12 +134,6 @@ variable "boot_volume_size_in_gbs" {
 }
 
 # cloud-init parameters
-
-variable "tailscale_auth_key" {
-  description = "Tailscale pre-authentication key for joining the tailnet"
-  type        = string
-  sensitive   = true
-}
 
 variable "user_data_path" {
   description = "Path to the cloud-init user_data script"

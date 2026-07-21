@@ -8,6 +8,7 @@ variable "region" {
   default     = "ap-melbourne-1"
 }
 
+
 variable "bastion_client_cidrs" {
   description = "CIDR blocks allowed to connect to the bastion public IP"
   type        = list(string)
@@ -31,4 +32,10 @@ variable "bastion_session_ssh_public_key" {
   type        = string
   default     = null
   sensitive   = true
+}
+
+variable "instance_ocids" {
+  description = "OCIDs of instances to reference (alternative to terraform_remote_state). Set via .tfvars."
+  type        = list(string)
+  default     = null
 }
