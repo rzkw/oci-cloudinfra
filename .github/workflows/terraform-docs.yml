@@ -12,6 +12,10 @@ jobs:
       contents: write
     if: github.actor != 'github-actions[bot]'
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2.20.0
+        with:
+          egress-policy: audit
       - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref }}
