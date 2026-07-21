@@ -1,6 +1,6 @@
 # oci-cloudinfra
 
-Configuration, documentation etc of my virtual network on OCI.
+Walkable LLC's Terraform config for our OCI virtual network.
 
 ## Modules
 
@@ -101,7 +101,7 @@ Configuration, documentation etc of my virtual network on OCI.
 
 ### Budget
 
-`terraform/budget/` — cost alerts (email), currently WIP.
+`terraform/budget/` — cost alerts (email).
 
 <!-- BEGIN_TF_DOCS budget -->
 <!-- BEGIN_TF_DOCS -->
