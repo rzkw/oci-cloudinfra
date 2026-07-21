@@ -20,6 +20,8 @@ Configuration, documentation etc of my virtual network on OCI.
 
 | Name | Type |
 |------|------|
+| [oci_bastion_bastion.this](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/bastion_bastion) | resource |
+| [oci_bastion_session.managed_ssh](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/bastion_session) | resource |
 | [oci_core_internet_gateway.internal](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_internet_gateway) | resource |
 | [oci_core_route_table.dev](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_route_table) | resource |
 | [oci_core_security_list.internal](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_security_list) | resource |
@@ -30,8 +32,12 @@ Configuration, documentation etc of my virtual network on OCI.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_bastion_client_cidrs"></a> [bastion\_client\_cidrs](#input\_bastion\_client\_cidrs) | CIDR blocks allowed to connect to the bastion public IP | `list(string)` | `null` | no |
+| <a name="input_bastion_session_ssh_public_key"></a> [bastion\_session\_ssh\_public\_key](#input\_bastion\_session\_ssh\_public\_key) | SSH public key for bastion managed SSH sessions | `string` | `null` | no |
 | <a name="input_compartment_ocid"></a> [compartment\_ocid](#input\_compartment\_ocid) | OCID from your tenancy page | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | region where you have OCI tenancy | `string` | `"ap-melbourne-1"` | no |
+| <a name="input_target_instance_ocid"></a> [target\_instance\_ocid](#input\_target\_instance\_ocid) | OCID of the target compute instance for bastion sessions | `string` | `null` | no |
+| <a name="input_target_instance_private_ip"></a> [target\_instance\_private\_ip](#input\_target\_instance\_private\_ip) | Private IP of the target compute instance for bastion sessions | `string` | `null` | no |
 
 ## Outputs
 
