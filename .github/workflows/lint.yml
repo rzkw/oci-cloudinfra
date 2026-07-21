@@ -9,6 +9,10 @@ jobs:
     name: terraform-fmt
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2.20.0
+        with:
+          egress-policy: audit
       - uses: actions/checkout@v7
       - uses: hashicorp/setup-terraform@v4
         with:
@@ -19,6 +23,10 @@ jobs:
     name: terraform-validate
     runs-on: ubuntu-latest
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2.20.0
+        with:
+          egress-policy: audit
       - uses: actions/checkout@v7
       - uses: hashicorp/setup-terraform@v4
         with:
