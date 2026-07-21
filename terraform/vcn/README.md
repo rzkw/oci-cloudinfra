@@ -25,6 +25,7 @@
 | <a name="input_bastion_client_cidrs"></a> [bastion\_client\_cidrs](#input\_bastion\_client\_cidrs) | CIDR blocks allowed to connect to the bastion public IP | `list(string)` | `null` | no |
 | <a name="input_bastion_session_ssh_public_key"></a> [bastion\_session\_ssh\_public\_key](#input\_bastion\_session\_ssh\_public\_key) | SSH public key for bastion managed SSH sessions | `string` | `null` | no |
 | <a name="input_compartment_ocid"></a> [compartment\_ocid](#input\_compartment\_ocid) | OCID from your tenancy page | `string` | n/a | yes |
+| <a name="input_instance_ocids"></a> [instance\_ocids](#input\_instance\_ocids) | OCIDs of instances to reference (alternative to terraform\_remote\_state). Set via .tfvars. | `list(string)` | `null` | no |
 | <a name="input_region"></a> [region](#input\_region) | region where you have OCI tenancy | `string` | `"ap-melbourne-1"` | no |
 | <a name="input_target_instance_ocid"></a> [target\_instance\_ocid](#input\_target\_instance\_ocid) | OCID of the target compute instance for bastion sessions | `string` | `null` | no |
 | <a name="input_target_instance_private_ip"></a> [target\_instance\_private\_ip](#input\_target\_instance\_private\_ip) | Private IP of the target compute instance for bastion sessions | `string` | `null` | no |

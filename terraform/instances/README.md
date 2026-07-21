@@ -37,12 +37,17 @@
 | <a name="input_source_type"></a> [source\_type](#input\_source\_type) | The source type for the instance. | `string` | `"image"` | no |
 | <a name="input_ssh_public_keys"></a> [ssh\_public\_keys](#input\_ssh\_public\_keys) | Public SSH keys to be included in the ~/.ssh/authorized\_keys file for the default user on the instance. To provide multiple keys, see docs/instance\_ssh\_keys.adoc. | `string` | `null` | no |
 | <a name="input_subnet_ocids"></a> [subnet\_ocids](#input\_subnet\_ocids) | OCID of subnet to create instance in | `list(string)` | n/a | yes |
-| <a name="input_tailscale_auth_key"></a> [tailscale\_auth\_key](#input\_tailscale\_auth\_key) | Tailscale pre-authentication key for joining the tailnet | `string` | n/a | yes |
+| <a name="input_tailscale_auth_key"></a> [tailscale\_auth\_key](#input\_tailscale\_auth\_key) | Tailscale pre-authentication key for joining the tailnet | `string` | `null` | no |
 | <a name="input_user_data_path"></a> [user\_data\_path](#input\_user\_data\_path) | Path to the cloud-init user\_data script | `string` | `"user-data.yaml"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| <a name="output_instance_availability_domains"></a> [instance\_availability\_domains](#output\_instance\_availability\_domains) | Availability domains of created instances. |
+| <a name="output_instance_boot_volume_ids"></a> [instance\_boot\_volume\_ids](#output\_instance\_boot\_volume\_ids) | Boot volume OCIDs of created instances. |
 | <a name="output_instance_flex"></a> [instance\_flex](#output\_instance\_flex) | Private and Public IPs for each instance. |
+| <a name="output_instance_ocids"></a> [instance\_ocids](#output\_instance\_ocids) | OCIDs of created instances. |
+| <a name="output_instance_private_ips"></a> [instance\_private\_ips](#output\_instance\_private\_ips) | Private IP addresses of created instances. |
+| <a name="output_instance_public_ips"></a> [instance\_public\_ips](#output\_instance\_public\_ips) | Public IP addresses of created instances (empty if no public IP assigned). |
 <!-- END_TF_DOCS -->

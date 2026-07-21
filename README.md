@@ -36,6 +36,7 @@ Walkable LLC's Terraform config for our OCI virtual network.
 | <a name="input_bastion_client_cidrs"></a> [bastion\_client\_cidrs](#input\_bastion\_client\_cidrs) | CIDR blocks allowed to connect to the bastion public IP | `list(string)` | `null` | no |
 | <a name="input_bastion_session_ssh_public_key"></a> [bastion\_session\_ssh\_public\_key](#input\_bastion\_session\_ssh\_public\_key) | SSH public key for bastion managed SSH sessions | `string` | `null` | no |
 | <a name="input_compartment_ocid"></a> [compartment\_ocid](#input\_compartment\_ocid) | OCID from your tenancy page | `string` | n/a | yes |
+| <a name="input_instance_ocids"></a> [instance\_ocids](#input\_instance\_ocids) | OCIDs of instances to reference (alternative to terraform\_remote\_state). Set via .tfvars. | `list(string)` | `null` | no |
 | <a name="input_region"></a> [region](#input\_region) | region where you have OCI tenancy | `string` | `"ap-melbourne-1"` | no |
 | <a name="input_target_instance_ocid"></a> [target\_instance\_ocid](#input\_target\_instance\_ocid) | OCID of the target compute instance for bastion sessions | `string` | `null` | no |
 | <a name="input_target_instance_private_ip"></a> [target\_instance\_private\_ip](#input\_target\_instance\_private\_ip) | Private IP of the target compute instance for bastion sessions | `string` | `null` | no |
@@ -95,14 +96,19 @@ Walkable LLC's Terraform config for our OCI virtual network.
 | <a name="input_source_type"></a> [source\_type](#input\_source\_type) | The source type for the instance. | `string` | `"image"` | no |
 | <a name="input_ssh_public_keys"></a> [ssh\_public\_keys](#input\_ssh\_public\_keys) | Public SSH keys to be included in the ~/.ssh/authorized\_keys file for the default user on the instance. To provide multiple keys, see docs/instance\_ssh\_keys.adoc. | `string` | `null` | no |
 | <a name="input_subnet_ocids"></a> [subnet\_ocids](#input\_subnet\_ocids) | OCID of subnet to create instance in | `list(string)` | n/a | yes |
-| <a name="input_tailscale_auth_key"></a> [tailscale\_auth\_key](#input\_tailscale\_auth\_key) | Tailscale pre-authentication key for joining the tailnet | `string` | n/a | yes |
+| <a name="input_tailscale_auth_key"></a> [tailscale\_auth\_key](#input\_tailscale\_auth\_key) | Tailscale pre-authentication key for joining the tailnet | `string` | `null` | no |
 | <a name="input_user_data_path"></a> [user\_data\_path](#input\_user\_data\_path) | Path to the cloud-init user\_data script | `string` | `"user-data.yaml"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| <a name="output_instance_availability_domains"></a> [instance\_availability\_domains](#output\_instance\_availability\_domains) | Availability domains of created instances. |
+| <a name="output_instance_boot_volume_ids"></a> [instance\_boot\_volume\_ids](#output\_instance\_boot\_volume\_ids) | Boot volume OCIDs of created instances. |
 | <a name="output_instance_flex"></a> [instance\_flex](#output\_instance\_flex) | Private and Public IPs for each instance. |
+| <a name="output_instance_ocids"></a> [instance\_ocids](#output\_instance\_ocids) | OCIDs of created instances. |
+| <a name="output_instance_private_ips"></a> [instance\_private\_ips](#output\_instance\_private\_ips) | Private IP addresses of created instances. |
+| <a name="output_instance_public_ips"></a> [instance\_public\_ips](#output\_instance\_public\_ips) | Public IP addresses of created instances (empty if no public IP assigned). |
 <!-- END_TF_DOCS -->
 <!-- END_TF_DOCS instances -->
 
