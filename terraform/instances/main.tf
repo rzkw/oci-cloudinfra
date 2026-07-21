@@ -143,3 +143,5 @@ output "instance_flex" {
   description = "Private and Public IPs for each instance."
   value       = local.instances_summary
 }
+
+
