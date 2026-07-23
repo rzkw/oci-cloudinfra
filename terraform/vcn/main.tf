@@ -80,7 +80,7 @@ resource "oci_core_security_list" "internal" {
 
   ingress_security_rules {
     protocol = "6"
-    source   = "103.154.138.8/32"
+    source   = "103.154.138.97/32"
     tcp_options {
       min = 22
       max = 22
@@ -89,7 +89,7 @@ resource "oci_core_security_list" "internal" {
 
   ingress_security_rules {
     protocol = "17"
-    source   = "103.154.138.8/32"
+    source   = "103.154.138.97/32"
     udp_options {
       min = 41641
       max = 41641
