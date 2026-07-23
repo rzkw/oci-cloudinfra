@@ -33,9 +33,3 @@ variable "bastion_session_ssh_public_key" {
   default     = null
   sensitive   = true
 }
-
-variable "instance_ocids" {
-  description = "OCIDs of instances to reference (alternative to terraform_remote_state). Set via .tfvars."
-  type        = list(string)
-  default     = null
-}
