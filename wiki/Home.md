@@ -1,6 +1,6 @@
 # Walkable LLC — OCI Dev Environment
 
-Internal dev machine running on Oracle Cloud. Consists of compute instance within private subnet in VCN,  access via bastion or Tailscale. Serves as Terraform/Ansible control node and image build machine.
+Internal infrastructure running on Oracle Cloud. One private VCN, one compute instance, bastion access, Tailscale mesh. Serves as the Terraform/Ansible control node and build machine.
 
 ## What's Running
 
@@ -35,18 +35,17 @@ See [Getting Started](Getting-Started.md) for the full walkthrough.
 
 ## IAM
 
-Two identities in use:
+Two identities in play:
 
-- **Admin user** (in identity domain 'domain-dev') — day-to-day console and API access. Has full control over the operational compartment. MFA enabled, FIDO2 secured.
-- **Agent identity** — read-only access for automation workflows (CI, Ansible, agentic exploration). Can inspect resources but can't modify them.
-- **Root user** — emergency and billing only. MFA enabled, FIDO2 secured. Never used for daily work.
+- **Admin user** (identity domain) — day-to-day console and API access. Has full control over the operational compartment. MFA enabled.
+- **Agent identity** — read-only access for automation workflows (CI, Ansible, monitoring). Can inspect resources but can't modify them.
+- **Root user** — emergency and billing only. FIDO2 secured. Never used for daily work.
 
 Cross-domain policies connect the identity domain to the compartment. See [IAM Details](IAM.md) for the full policy breakdown.
 
 ## Navigation
 
 - [Getting Started](Getting-Started.md) — setup walkthrough and access guide
-- [Architecture Overview]() - 
 - [IAM Details](IAM.md) — identity domains, policies, agent access
 - [Archived Setup Guide](Setup-Guide-Archived.md) — legacy manual OCI console steps (superseded by Terraform)
 
@@ -55,7 +54,7 @@ Cross-domain policies connect the identity domain to the compartment. See [IAM D
 - State is stored in OCI Object Storage (`tfstate` bucket).
 - `scripts/oci-subnet-setup.sh` is a legacy script that predates the Terraform config. Superseded — kept for reference only.
 - Provider version drift exists between modules (see AGENTS.md). Being unified.
-- SSH access restricted to single IP. Tailscale UDP 41641 also restricted to single IP.
+- SSH access restricted to home IP. Tailscale UDP 41641 also restricted to home IP.
 
 ---
 
