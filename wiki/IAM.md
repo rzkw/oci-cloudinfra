@@ -87,9 +87,9 @@ OCI-created default. The `Administrators` group in the Default domain retains fu
 
 | Identity | Console | API | Purpose |
 |----------|---------|-----|---------|
-| Root user | FIDO2 | API key | Emergency and billing only |
-| Admin user (`domain-dev`) | MFA | API key | Daily operations |
-| `agents` user | — | API key | Automated workflows |
+| Root user | FIDO2, MFA | API key | Emergency and billing only |
+| Admin user (`domain-dev`) | FIDO2, MFA | API key | Daily operations |
+| `agents` user | FIDO2, MFA | API key | Automated workflows |
 
 ## Use Cases
 

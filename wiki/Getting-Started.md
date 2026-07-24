@@ -31,20 +31,20 @@ Modules are independent. Deploy in order:
 # Network first
 cd terraform/vcn
 terraform init && terraform apply
-cd ../instances
 
 # Compute (needs the subnet OCID from VCN output)
+cd ../instances
 terraform init && terraform apply
-cd ../budget
 
 # Budget alerts
+cd ../budget
 terraform init && terraform apply
 cd ../..
 ~~~
 
 ## 3. Connect
 
-**Via Bastion (recommended):**
+**Via Bastion:**
 
 1. Create a bastion session in the OCI console, or use the Terraform-managed session.
 2. Copy the SSH command from the session details.
@@ -52,7 +52,7 @@ cd ../..
 
 **Via Tailscale:**
 
-If Tailscale is configured on the instance, connect through your tailnet directly — no bastion needed.
+After Tailscale is installed and configured on the instance via related [Ansible playbook] (https://github.com/rzkw/ansible/blob/main/playbooks/server.yml), connect through your tailnet directly — no bastion needed.
 
 ## 4. Ansible
 
