@@ -1,6 +1,10 @@
+<img src="/Users/rizky/Documents/GitHub/oci-cloudinfra/wiki/Network diagram.png" alt=""/>
+
 # Walkable LLC — OCI Dev Environment
 
 Internal infrastructure running on Oracle Cloud. One private VCN, one compute instance, bastion access, Tailscale mesh. Serves as the Terraform/Ansible control node and build machine.
+
+Infra is scalable: users and resources can be added as required while maintaining security. 
 
 ## What's Running
 
@@ -46,7 +50,9 @@ Cross-domain policies connect the identity domain to the compartment. See [IAM D
 ## Navigation
 
 - [Getting Started](Getting-Started.md) — setup walkthrough and access guide
+- [Architecture Overview](#architecture-overview)
 - [IAM Details](IAM.md) — identity domains, policies, agent access
+- [Archived Wiki](Wiki-Archived.md) — legacy wiki
 - [Archived Setup Guide](Setup-Guide-Archived.md) — legacy manual OCI console steps (superseded by Terraform)
 
 ## Notes
