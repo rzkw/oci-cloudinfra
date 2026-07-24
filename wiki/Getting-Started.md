@@ -2,11 +2,11 @@
 
 ## Prerequisites
 
-- Oracle Cloud account (Free Tier or Pay As You Go)
+- Oracle Cloud account (Pay As You Go)
 - Terraform >= 1.x installed locally
 - OCI CLI configured (`oci setup config` — look for `DEFAULT` profile)
 - SSH key pair
-- Access to the home IP allowlisted in the security list
+- Access to IP allowlisted in the security list
 
 ## 1. Clone and Configure
 
@@ -29,16 +29,17 @@ Modules are independent. Deploy in order:
 
 ~~~bash
 # Network first
-terraform -chdir=terraform/vcn init
-terraform -chdir=terraform/vcn apply
+cd terraform/vcn
+terraform init && terraform apply
+cd ../instances
 
 # Compute (needs the subnet OCID from VCN output)
-terraform -chdir=terraform/instances init
-terraform -chdir=terraform/instances apply
+terraform init && terraform apply
+cd ../budget
 
 # Budget alerts
-terraform -chdir=terraform/budget init
-terraform -chdir=terraform/budget apply
+terraform init && terraform apply
+cd ../..
 ~~~
 
 ## 3. Connect
