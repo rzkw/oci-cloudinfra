@@ -1,17 +1,67 @@
-### Overview
+# Getting Started
 
-This project demos a small but secure, isolated cloud infrastructure on Oracle Cloud using industry standard best practices: network segmentation and identity/access management (IAM). Practical use cases for this setup include a test environment for a dev agency, students learning IT/Computer Science and e-commerce business inventory/analytics.
+## Prerequisites
 
-### What You'll Learn
+- Oracle Cloud account (Free Tier or Pay As You Go)
+- Terraform >= 1.x installed locally
+- OCI CLI configured (`oci setup config` — look for `DEFAULT` profile)
+- SSH key pair
+- Access to the home IP allowlisted in the security list
 
-* Building a Virtual Cloud Network (VCN) with public & private subnets
-* Implementing Bastion service for secure SSH access
-* Configuring cross-domain IAM policies
-* Setting up NAT Gateway for outbound connectivity
-* Enabling security controls and audit logging
+## 1. Clone and Configure
 
-### Prerequisites
+~~~bash
+git clone git@github.com:rzkw/oci-cloudinfra.git
+cd oci-cloudinfra
+~~~
 
-* Oracle Cloud Infrastructure account (Free Tier or Pay As You Go)
-* An understanding of networking fundamentals (CIDR blocks, subnets, routing)
-* Some familiarity with the Linux command line
+Set required variables. The VCN module needs your compartment OCID:
+
+~~~bash
+export TF_VAR_compartment_ocid="ocid1.compartment.oc1..aaaaaaaa..."
+~~~
+
+Other optional variables (instance shape, SSH keys, Tailscale auth key) — check `terraform/*/variables.tf` for the full list.
+
+## 2. Deploy
+
+Modules are independent. Deploy in order:
+
+~~~bash
+# Network first
+terraform -chdir=terraform/vcn init
+terraform -chdir=terraform/vcn apply
+
+# Compute (needs the subnet OCID from VCN output)
+terraform -chdir=terraform/instances init
+terraform -chdir=terraform/instances apply
+
+# Budget alerts
+terraform -chdir=terraform/budget init
+terraform -chdir=terraform/budget apply
+~~~
+
+## 3. Connect
+
+**Via Bastion (recommended):**
+
+1. Create a bastion session in the OCI console, or use the Terraform-managed session.
+2. Copy the SSH command from the session details.
+3. Replace `<privateKey>` with your key path and run it.
+
+**Via Tailscale:**
+
+If Tailscale is configured on the instance, connect through your tailnet directly — no bastion needed.
+
+## 4. Ansible
+
+The instance runs a cloud-init script on first boot that installs Ansible and pulls the playbook from `rzkw/ansible`. To re-run manually:
+
+~~~bash
+ssh <instance>  # via bastion or tailscale
+ansible-playbook playbooks/server.yml
+~~~
+
+## Budget
+
+The budget module sets a $1/month alert. You'll get email notifications when actual or forecasted spend hits 1% of the budget. To change the threshold, edit `terraform/budget/main.tf`.
