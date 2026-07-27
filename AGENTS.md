@@ -39,7 +39,7 @@ Three independent Terraform root modules — each has its own state:
 | Module | Path | Purpose |
 |--------|------|---------|
 | VCN | `terraform/vcn/` | VCN, subnets, routing, security lists |
-| Instances | `terraform/instances/` | Compute (A1.Flex), uses remote module |
+| Instances | `terraform/instances/` | Compute (A1.Flex), cloud-init, block volumes |
 | Budget | `terraform/budget/` | Cost alerts (email) |
 
 Each module has its own `providers.tf`, `variables.tf`, and `.terraform.lock.hcl`.

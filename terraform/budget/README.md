@@ -1,27 +1,22 @@
-<!-- BEGIN_TF_DOCS -->
-## Requirements
+# Budget
 
-| Name | Version |
-|------|---------|
-| <a name="requirement_oci"></a> [oci](#requirement\_oci) | ~> 8.20 |
+Monthly cost alert — $1 budget with email notifications at 1% threshold.
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [oci_budget_alert_rule.actual](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/budget_alert_rule) | resource |
-| [oci_budget_alert_rule.forecast](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/budget_alert_rule) | resource |
-| [oci_budget_budget.dollar_budget](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/budget_budget) | resource |
+| Name | Description |
+|------|-------------|
+| `oci_budget_budget.dollar_budget` | $1/month budget |
+| `oci_budget_alert_rule.actual` | Alert on actual spend |
+| `oci_budget_alert_rule.forecast` | Alert on forecasted spend |
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_budget_alert_email"></a> [budget\_alert\_email](#input\_budget\_alert\_email) | Email address for budget alerts | `string` | n/a | yes |
-| <a name="input_region"></a> [region](#input\_region) | OCI region | `string` | `"ap-melbourne-1"` | no |
-| <a name="input_tenancy_ocid"></a> [tenancy\_ocid](#input\_tenancy\_ocid) | OCID of the tenancy | `string` | n/a | yes |
+| Name | Description | Type | Default |
+|------|-------------|------|---------|
+| `tenancy_ocid` | Tenancy OCID | `string` | n/a |
+| `budget_alert_email` | Email for budget alerts | `string` | n/a |
+| `region` | OCI region | `string` | `"ap-melbourne-1"` |
 
-## Outputs
-
-No outputs.
+<!-- BEGIN_TF_DOCS -->
 <!-- END_TF_DOCS -->
