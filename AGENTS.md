@@ -97,7 +97,7 @@ creating a PR.
 
 - **No `.tfvars` committed** (gitignored). Values come from environment or CI.
 - **VCN access**: SSH + Tailscale (UDP 41641) from home IP only.
-- Wiki docs in `wiki/` cover architecture, security, IAM, and cost.
+- Docs in `docs/` cover architecture, security, IAM, and cost.
 
 ## Commit signing
 
