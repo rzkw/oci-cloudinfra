@@ -31,6 +31,14 @@ Allow group 'domain-dev'/'Administrators' to manage compartments in tenancy
 
 Grants the `domain-dev/Administrators` group full control over Comp-1 plus the ability to create compartments and manage policies.
 
+### `budget` — budget management at tenancy level
+
+~~~
+Allow group 'domain-dev'/'Administrators' to manage usage-budgets in tenancy
+~~~
+
+The budget Terraform module creates budget resources at the tenancy root level (`compartment_id = var.tenancy_ocid`). Without this policy, terraform apply fails with `NotAuthorizedOrNotFound` for the `domain-dev/Administrators` group.
+
 ### `read-only` — agent inspection
 
 ~~~
