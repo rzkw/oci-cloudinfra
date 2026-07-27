@@ -21,6 +21,14 @@ Comp-1 holds all operational resources — VCN, instances, VNICs, budgets. The r
 
 All policies are at tenancy root level. Terraform doesn't manage IAM — these are set up manually in the console.
 
+### `budget` — budget management at tenancy level
+
+~~~
+Allow group 'domain-dev'/'Administrators' to manage usage-budgets in tenancy
+~~~
+
+The budget Terraform module creates budget resources at the tenancy root level (`compartment_id = var.tenancy_ocid`). Without this policy, terraform apply fails with `NotAuthorizedOrNotFound` for the `domain-dev/Administrators` group.
+
 ### `rizky-primary-admin` — admin access to Comp-1
 
 ~~~

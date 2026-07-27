@@ -29,6 +29,14 @@ Also use **OCI API tools** (`oci-identity`, `oci-networking`, `oci-compute`) to
 validate OCIDs, compartments, subnets, images, and existing resources against
 real state.
 
+**OCI Pricing MCP Server** (`uvx oracle.oci-pricing-mcp-server`):
+
+| Tool | When to use |
+|------|-------------|
+| `pricing_search_name` | Check pricing for OCI services before deployment (e.g., "Compute pricing in USD") |
+| `pricing_get_sku` | Look up specific SKU pricing |
+| `ping` | Health check |
+
 HCP Terraform workspace/run/variable tools are **not relevant** — this repo
 uses local state per root module.
 
@@ -68,6 +76,14 @@ Module docs are auto-generated on merge to `main` via
 
 Each module has a `.terraform-docs.yml` configuring sections: header,
 requirements, inputs, outputs, resources, footer.
+
+### Before deployment (budget check)
+
+Before applying any Terraform module, check pricing against the budget:
+
+1. Use `pricing_search_name("Compute", "USD", require_priced=True)` to estimate new resource costs
+2. Compare estimated costs against the $1/month budget in `terraform/budget/`
+3. Only proceed if estimated costs are within budget
 
 ### Before creating a PR (for CI and uncommitted checks)
 
