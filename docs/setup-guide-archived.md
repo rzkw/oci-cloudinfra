@@ -1,6 +1,6 @@
 # Archived Setup Guide
 
-> **This guide is archived.** The manual OCI console steps below are outdated and describe a different architecture (10.0.0.0/16 VCN with NAT Gateway). Current infrastructure is managed via Terraform — see [Getting Started](Getting-Started.md).
+> **This guide is archived.** The manual OCI console steps below are outdated and describe a different architecture (10.0.0.0/16 VCN with NAT Gateway). Current infrastructure is managed via Terraform — see [Getting Started](getting-started.md).
 
 The original walkthrough covered: compartment creation, identity domain setup, cross-domain policies, VCN with public/private subnets, NAT Gateway, bastion service, and compute instance creation — all via the OCI console.
 
@@ -81,4 +81,4 @@ Create bastion, enable Bastion plugin on instance, create managed SSH session.
 
 ---
 
-*This content is preserved for reference. For current setup instructions, see [Getting Started](Getting-Started.md).*
+*This content is preserved for reference. For current setup instructions, see [Getting Started](getting-started.md).*

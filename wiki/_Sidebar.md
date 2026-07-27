@@ -1,5 +1,0 @@
-* [Home](Home.md)
-* [Architecture Overview](Home.md#whats-running)
-* [Getting Started](Getting-Started.md)
-* [IAM & Access Control](IAM.md)
-* [Archived Setup Guide](Setup-Guide-Archived.md)

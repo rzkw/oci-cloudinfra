@@ -31,7 +31,7 @@ terraform -chdir=terraform/budget apply
 
 No `.tfvars` are committed. Set variables via environment or CLI flags.
 
-See [Getting Started](Getting-Started.md) for the full walkthrough.
+See [Getting Started](getting-started.md) for the full walkthrough.
 
 ## IAM
 
@@ -41,14 +41,13 @@ Two identities in use:
 - **Agent identity** — read-only access for automation workflows (CI, Ansible, agentic exploration). Can inspect resources but can't modify them.
 - **Root user** — emergency and billing only. MFA enabled, FIDO2 secured. Never used for daily work.
 
-Cross-domain policies connect the identity domain to the compartment. See [IAM Details](IAM.md) for the full policy breakdown.
+Cross-domain policies connect the identity domain to the compartment. See [Access Control](access-control.md) for the full policy breakdown.
 
 ## Navigation
 
-- [Getting Started](Getting-Started.md) — setup walkthrough and access guide
-- [Architecture Overview]() - 
-- [IAM Details](IAM.md) — identity domains, policies, agent access
-- [Archived Setup Guide](Setup-Guide-Archived.md) — legacy manual OCI console steps (superseded by Terraform)
+- [Getting Started](getting-started.md) — setup walkthrough and access guide
+- [Access Control](access-control.md) — identity domains, policies, agent access
+- [Archived Setup Guide](setup-guide-archived.md) — legacy manual OCI console steps (superseded by Terraform)
 
 ## Notes
 
