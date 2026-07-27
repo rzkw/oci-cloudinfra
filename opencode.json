@@ -1,0 +1,35 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "terraform": {
+      "type": "local",
+      "command": ["docker", "run", "-i", "--rm", "hashicorp/terraform-mcp-server:1.0.0"],
+      "enabled": true
+    },
+    "oci-compute": {
+      "type": "local",
+      "command": ["uvx", "oracle.oci-compute-mcp-server"],
+      "enabled": true
+    },
+    "oci-networking": {
+      "type": "local",
+      "command": ["uvx", "oracle.oci-networking-mcp-server"],
+      "enabled": true
+    },
+    "oci-identity": {
+      "type": "local",
+      "command": ["uvx", "oracle.oci-identity-mcp-server"],
+      "enabled": true
+    },
+    "oci-pricing": {
+      "type": "local",
+      "command": ["uvx", "oracle.oci-pricing-mcp-server"],
+      "enabled": true
+    },
+    "terraform-best-practices": {
+      "type": "remote",
+      "url": "https://www.terraform-best-practices.com/~gitbook/mcp",
+      "enabled": true
+    }
+  }
+}
