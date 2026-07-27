@@ -16,7 +16,7 @@ terraform -chdir=instances init && terraform -chdir=instances apply
 terraform -chdir=budget init && terraform -chdir=budget apply
 ```
 
-Deploy in order: VCN first (provides subnet OCID), then instances, then budget.
+Deploy in order: Budget first, then VCN (provides subnet OCID), then instances.
 
 ## Remote State
 
