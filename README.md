@@ -42,3 +42,12 @@ No `.tfvars` committed. Set variables via environment or CLI flags. See [docs/ge
 - [Getting Started](docs/getting-started.md) — setup walkthrough and access guide
 - [Access Control](docs/access-control.md) — identity domains, policies, agent access
 - [Archived Setup Guide](docs/setup-guide-archived.md) — legacy manual OCI console steps (superseded by Terraform)
+
+## Verification
+
+Module documentation was verified against:
+- **Terraform Registry** (`oracle/oci` provider) — all resource types, attributes, and data sources confirmed
+- **Terraform Best Practices** — README structure and naming conventions validated
+- **OCI Identity MCP** — tenancy, availability domains, and compartments confirmed
+- **OCI Compute MCP** — image OCID and instance shapes confirmed
+- **OCI Networking MCP** — VCN and subnet references confirmed
