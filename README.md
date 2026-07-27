@@ -45,9 +45,9 @@ No `.tfvars` committed. Set variables via environment or CLI flags. See [docs/ge
 
 ## Verification
 
-Module documentation was verified against:
-- **Terraform Registry** (`oracle/oci` provider) — all resource types, attributes, and data sources confirmed
+Module documentation was verified against live OCI state using:
+- **Terraform Registry** (`oracle/oci` 8.24.0) — all 15 resource types and data sources confirmed, attributes compatible
 - **Terraform Best Practices** — README structure and naming conventions validated
-- **OCI Identity MCP** — tenancy, availability domains, and compartments confirmed
+- **OCI Identity MCP** — tenancy `hello17`, compartment `Comp-1`, AD `KfOu:AP-MELBOURNE-1-AD-1` confirmed
 - **OCI Compute MCP** — image OCID and instance shapes confirmed
-- **OCI Networking MCP** — VCN and subnet references confirmed
+- **OCI Networking MCP** — VCN `172.16.0.0/20`, subnet `172.16.0.0/24`, security lists confirmed
