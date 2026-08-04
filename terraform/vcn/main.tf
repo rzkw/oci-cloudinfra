@@ -19,13 +19,6 @@ provider "oci" {
   config_file_profile = "DEFAULT"
 }
 
-data "oci_core_services" "all_mel" {
-  filter {
-    name   = "name"
-    values = ["All MEL Services In Oracle Services Network"]
-  }
-}
-
 resource "oci_core_vcn" "internal" {
   dns_label      = "internal"
   cidr_block     = "172.16.0.0/20"
@@ -41,18 +34,7 @@ resource "oci_core_internet_gateway" "internal" {
   enabled        = true
 }
 
-# Service Gateway — for private access to OCI services (Object Storage, etc.)
-resource "oci_core_service_gateway" "internal" {
-  compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.internal.id
-  display_name   = "servicegateway20260720114218"
-
-  services {
-    service_id = data.oci_core_services.all_mel.services[0].id
-  }
-}
-
-# Route table for dev subnet — IGW for internet, SG for OCI services
+# Route table for dev subnet — IGW for internet
 resource "oci_core_route_table" "dev" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
@@ -61,11 +43,6 @@ resource "oci_core_route_table" "dev" {
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
     network_entity_id = oci_core_internet_gateway.internal.id
-  }
-  route_rules {
-    destination       = data.oci_core_services.all_mel.services[0].cidr_block
-    destination_type  = "SERVICE_CIDR_BLOCK"
-    network_entity_id = oci_core_service_gateway.internal.id
   }
 }
 
@@ -109,30 +86,4 @@ resource "oci_core_subnet" "dev" {
   dns_label                  = "dev"
   route_table_id             = oci_core_route_table.dev.id
   security_list_ids          = [oci_core_security_list.internal.id]
-}
-
-# Bastion — managed SSH access to the instance
-resource "oci_bastion_bastion" "this" {
-  count                        = var.target_instance_ocid != null ? 1 : 0
-  bastion_type                 = "standard"
-  compartment_id               = var.compartment_ocid
-  target_subnet_id             = oci_core_subnet.dev.id
-  client_cidr_block_allow_list = var.bastion_client_cidrs
-  name                         = "bastion-${oci_core_vcn.internal.display_name}"
-}
-
-resource "oci_bastion_session" "managed_ssh" {
-  count      = var.target_instance_ocid != null ? 1 : 0
-  bastion_id = oci_bastion_bastion.this[0].id
-  target_resource_details {
-    session_type                       = "MANAGED_SSH"
-    target_resource_id                 = var.target_instance_ocid
-    target_resource_private_ip_address = var.target_instance_private_ip
-    target_resource_port               = 22
-  }
-  key_details {
-    public_key_content = var.bastion_session_ssh_public_key
-  }
-  display_name           = "managed-ssh-vm"
-  session_ttl_in_seconds = 10800
 }
