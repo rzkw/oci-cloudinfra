@@ -59,6 +59,7 @@ Run commands per-module with `terraform -chdir=terraform/<module>`.
 ## Git Rules
 
 - **Never force push.** Add new commits only. `git push --force` is forbidden on any branch. Use `--force-with-lease` when necessary. If a PR review requires changes, make a new commit and push normally.
+- **Auto-assign reviewer.** Every PR must have `rzkw` assigned as reviewer. GitHub CODEOWNERS (`* @rzkw`) requests this review automatically — never remove or override it.
 
 ## Required Workflow
 
@@ -90,6 +91,9 @@ requirements, inputs, outputs, resources, footer.
   controls). Acceptable sources: official product documentation, personal blogs
   from engineers/devs/sysadmins, and product engineering blogs. Academic papers
   are never acceptable.
+- All plans and reports MUST stay under 500 words, **including** the References
+  section. This applies to all future documents only; existing plans/reports are
+  exempt.
 - Plans are saved under `plans/` with a dated filename.
 - Reports (after completion, during WIP, etc.) are saved under `reports/` and
   reference the plan, PR, and commits.
