@@ -36,7 +36,7 @@ See [Getting Started](getting-started.md) for the full walkthrough.
 Two identities in use:
 
 - **Admin user** (in identity domain 'domain-dev') — day-to-day console and API access. Has full control over the operational compartment. MFA enabled, FIDO2 secured.
-- **Agent identity** — read-only access for automation workflows (CI, Ansible, agentic exploration). Can inspect resources but can't modify them.
+- **Agent identity** — inspect-only access for agentic exploration. Can inspect resources but can't modify them.
 - **Root user** — emergency and billing only. MFA enabled, FIDO2 secured. Never used for daily work.
 
 Cross-domain policies connect the identity domain to the compartment. See [Access Control](access-control.md) for the full policy breakdown.
