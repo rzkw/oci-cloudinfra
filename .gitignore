@@ -6,3 +6,5 @@ do-not-upload/
 *.tfvars
 .tfvars.json
 .worktrees/
+
+*.tfplan

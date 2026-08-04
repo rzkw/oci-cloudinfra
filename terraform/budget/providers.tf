@@ -1,4 +1,11 @@
 terraform {
+  backend "oci" {
+    bucket    = "tfstate"
+    namespace = "axvczntoncvg"
+    key       = "terraform/budget/terraform.tfstate"
+    region    = "ap-melbourne-1"
+  }
+
   required_providers {
     oci = {
       source  = "oracle/oci"

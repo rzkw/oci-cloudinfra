@@ -2,6 +2,8 @@ terraform {
   backend "oci" {
     bucket    = "tfstate"
     namespace = "axvczntoncvg"
+    key       = "terraform/vcn/terraform.tfstate"
+    region    = "ap-melbourne-1"
   }
 
   required_providers {
