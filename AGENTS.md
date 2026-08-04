@@ -51,6 +51,9 @@ Three independent Terraform root modules — each has its own state:
 | Budget | `terraform/budget/` | Cost alerts (email) |
 
 Each module has its own `providers.tf`, `variables.tf`, and `.terraform.lock.hcl`.
+Each root module's `backend "oci"` block must set a distinct `key`
+(`terraform/<module>/terraform.tfstate`); a missing key defaults to
+`terraform.tfstate` and silently collides with other modules.
 Run commands per-module with `terraform -chdir=terraform/<module>`.
 
 ## Git Rules
@@ -76,6 +79,20 @@ Module docs are auto-generated on merge to `main` via
 
 Each module has a `.terraform-docs.yml` configuring sections: header,
 requirements, inputs, outputs, resources, footer.
+
+### Plan approval & references
+
+- Never implement major plans without approval from the repo admin/code owner.
+- Major changes require the plan to be submitted for PR review before any
+  implementation.
+- All plans and reports MUST include a **References** section citing sources
+  for every design decision (libraries, services, runtime behavior, security
+  controls). Acceptable sources: official product documentation, personal blogs
+  from engineers/devs/sysadmins, and product engineering blogs. Academic papers
+  are never acceptable.
+- Plans are saved under `plans/` with a dated filename.
+- Reports (after completion, during WIP, etc.) are saved under `reports/` and
+  reference the plan, PR, and commits.
 
 ### Before deployment (budget check)
 
