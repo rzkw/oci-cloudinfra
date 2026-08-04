@@ -7,6 +7,14 @@ Status: AWAITING ADMIN APPROVAL — do not execute any part of this plan
 document. A prior attempt executed Phase A commits without approval; they
 were removed. This plan is the single source of truth for the approved work.
 
+## Plan modifications by @rzkw (PR #59 review)
+
+- **Task 2 removed**: do not implement the backend-key guard script / pre-commit
+  hook / CI job — too many features to maintain.
+- **Task 3.5 revised**: reports (after completion, during WIP, etc.) are saved
+  under `reports/` and reference the plan, PR, and commits. Plans remain under
+  `plans/`. References wording per @rzkw below.
+
 ## Global constraints
 
 - **Approval gate**: no Phase A code changes and no Phase B state operations
@@ -45,7 +53,7 @@ Credentials split: this machine's agents identity is read-only on the state
 bucket (`tfstate-bucket` policy grants manage only to rizky). All state
 operations in Phase B run on the deploy machine with rizky credentials.
 
-## Phase A — Code + CI (this repo, this PR)
+## Phase A — Code (this repo, this PR)
 
 Goal: make it impossible for two modules to silently share backend state again.
 
@@ -63,11 +71,9 @@ Resulting keys: `terraform/vcn/terraform.tfstate`,
 
 ### Task 2 — Guard against key collisions
 
-- New `scripts/check-backend-keys.sh`: parses every root module's `.tf` files,
-  fails if any module is missing a backend key or if any two modules share the
-  same key.
-- `.pre-commit-config.yaml`: add local hook running the script.
-- `.github/workflows/lint.yml`: add a `backend-keys` job running the script.
+**REMOVED per @rzkw PR #59 review** — too many features to maintain. No guard
+script, no pre-commit hook, no CI job. The per-module keys are enforced by
+manual review of the backend blocks (single source of truth: Task 1).
 
 ### Task 3 — Docs
 
@@ -78,12 +84,19 @@ Resulting keys: `terraform/vcn/terraform.tfstate`,
 
 ### Task 3.5 — Planning references + approval gate (user requirement)
 
-`AGENTS.md`: add a "Plans and reports" rule under Required Workflow —
-every plan or report must be saved under `plans/` and include a References
-section citing official docs and personal/engineering blogs (no academic
-papers). Add an **approval gate**: no major plan (state operations, resource
-destruction, multi-module changes) may be executed until an admin approves
-the written plan.
+`AGENTS.md`: add a "Plans and reports" rule under Required Workflow:
+
+- All plans and reports MUST include a **References** section citing sources
+  for every design decision (libraries, services, runtime behavior, security
+  controls). Acceptable sources: official product documentation, personal blogs
+  from engineers/devs/sysadmins, and product engineering blogs. Academic papers
+  are never acceptable.
+- Plans are saved under `plans/` with a dated filename.
+- Reports (after completion, during WIP, etc.) are saved under `reports/` and
+  reference the plan, PR, and commits.
+- **Approval gate**: no major plan (state operations, resource destruction,
+  multi-module changes) may be executed until an admin approves the written
+  plan.
 
 ## Phase B — Operations runbook (deploy machine, rizky creds)
 
@@ -165,7 +178,6 @@ recreate-from-scratch component is the instance, which Task 7 already does.
 
 1. Plan file (this document) + Task 3.5 AGENTS.md rule — **approved first**
 2. Task 1 backend keys
-3. Task 2 guard script + hooks + CI
-4. Task 3 docs
-5. Commit, push, open PR
-6. Phase B after merge (deploy machine, admin-approval gate met via this plan)
+3. Task 3 docs
+4. Commit, push, open PR
+5. Phase B after merge (deploy machine, admin-approval gate met via this plan)
