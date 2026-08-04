@@ -9,9 +9,7 @@ Walkable LLC's internal dev environment on Oracle Cloud Infrastructure.
 | VCN | `172.16.0.0/20` | Melbourne region |
 | Dev Subnet | `172.16.0.0/24` | Private — no public IPs |
 | Internet Gateway | — | Outbound internet |
-| Service Gateway | — | Private access to OCI Object Storage |
-| Compute Instance | A1.Flex — 4 OCPU, 24 GB RAM | Ubuntu, cloud-init bootstraps Ansible |
-| Bastion | Standard | Managed SSH sessions, 3h TTL |
+| Compute Instance | A1.Flex — 4 OCPU, 24 GB RAM | Ubuntu, cloud-init bootstraps Ansible; accessed via Tailscale |
 | Budget Alert | $1/month | Email notifications at 1% threshold |
 
 ## Repo Layout
@@ -25,7 +23,15 @@ Walkable LLC's internal dev environment on Oracle Cloud Infrastructure.
 
 ## Remote State
 
-State is stored in OCI Object Storage — `tfstate` bucket in namespace `axvczntoncvg`. Each Terraform module has its own state file.
+State is stored in OCI Object Storage — `tfstate` bucket in namespace `axvczntoncvg` (region `ap-melbourne-1`). Each root module uses a distinct state key:
+
+| Module | State key |
+|--------|-----------|
+| VCN | `terraform/vcn/terraform.tfstate` |
+| Instances | `terraform/instances/terraform.tfstate` |
+| Budget | `terraform/budget/terraform.tfstate` |
+
+A missing backend key defaults to `terraform.tfstate` and silently collides with other modules — every root module must set an explicit `key` in its `backend "oci"` block.
 
 ## Quick Start
 

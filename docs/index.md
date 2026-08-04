@@ -1,6 +1,6 @@
 # Walkable LLC — OCI Dev Environment
 
-Internal dev machine running on Oracle Cloud. Consists of compute instance within private subnet in VCN,  access via bastion or Tailscale. Serves as Terraform/Ansible control node and image build machine.
+Internal dev machine running on Oracle Cloud. Consists of compute instance within private subnet in VCN, accessed via Tailscale. Serves as Terraform/Ansible control node and image build machine.
 
 ## What's Running
 
@@ -9,9 +9,7 @@ Internal dev machine running on Oracle Cloud. Consists of compute instance withi
 | VCN | `172.16.0.0/20` | "My internal VCN", Melbourne region |
 | Dev Subnet | `172.16.0.0/24` | Private — no public IPs |
 | Internet Gateway | — | Outbound internet for the VCN |
-| Service Gateway | — | Private access to OCI Object Storage |
-| Compute Instance | A1.Flex — 4 OCPU, 24 GB RAM | Ubuntu, cloud-init bootstraps Ansible |
-| Bastion | Standard | Managed SSH sessions, 3h TTL |
+| Compute Instance | A1.Flex — 4 OCPU, 24 GB RAM | Ubuntu, cloud-init bootstraps Ansible; accessed via Tailscale |
 | Budget Alert | $1/month | Email notifications at 1% threshold |
 
 ## Quick Start
@@ -51,7 +49,8 @@ Cross-domain policies connect the identity domain to the compartment. See [Acces
 
 ## Notes
 
-- State is stored in OCI Object Storage (`tfstate` bucket).
+- State is stored in OCI Object Storage (`tfstate` bucket). Each module uses a distinct key — `terraform/<module>/terraform.tfstate` (see `README.md`). A missing backend key defaults to `terraform.tfstate` and collides with other modules.
+- Access is Tailscale-only — no bastion, no public port 22.
 - `scripts/oci-subnet-setup.sh` is a legacy script that predates the Terraform config. Superseded — kept for reference only.
 - Provider version drift exists between modules (see AGENTS.md). Being unified.
 - SSH access restricted to single IP. Tailscale UDP 41641 also restricted to single IP.
