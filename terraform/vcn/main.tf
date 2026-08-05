@@ -5,7 +5,8 @@ resource "oci_core_vcn" "internal" {
   display_name   = "My internal VCN"
 }
 
-# 05/08/2026 NAT Gateway
+# 05/08/2026 Changed to NAT Gateway. Ref: https://foggykitchen.com/2018/11/05/oci-nat-gateway-terraform/
+
 resource "oci_core_nat_gateway" "nat-gateway" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
