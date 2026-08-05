@@ -1,19 +1,3 @@
-data "oci_identity_availability_domains" "ad" {
-  compartment_id = var.compartment_ocid
-}
-
-data "oci_core_volume_backup_policies" "default_backup_policies" {}
-
-locals {
-  ads = [
-    for i in data.oci_identity_availability_domains.ad.availability_domains : i.name
-  ]
-  backup_policies = {
-    for i in data.oci_core_volume_backup_policies.default_backup_policies.volume_backup_policies :
-    i.display_name => i.id
-  }
-}
-
 resource "oci_core_instance" "this" {
   count                               = var.instance_count
   availability_domain                 = var.instance_ad_number != null ? element(local.ads, var.instance_ad_number - 1) : element(local.ads, count.index)
