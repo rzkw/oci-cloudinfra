@@ -36,9 +36,14 @@ resource "oci_core_security_list" "internal" {
     protocol    = "all"
   }
 
+  # Allow SSH from bastion private endpoint only. Reference: https://blog.victorsilva.com.uy/oci-bastion-service-terraform/
+  
   ingress_security_rules {
     protocol = "6"
-    source   = "0.0.0.0/0"
+    source   = "${oci_bastion_bastion.bastion.private_endpoint_ip_address}"
+    source_type = "CIDR_BLOCK"
+    description = "Allow SSH from OCI Bastion private endpoint"
+    
     tcp_options {
       min = 22
       max = 22
