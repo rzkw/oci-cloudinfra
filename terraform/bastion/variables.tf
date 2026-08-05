@@ -32,3 +32,9 @@ variable "client_cidr_block_allow_list" {
   description = "List of CIDR blocks allowed to connect to the bastion"
   default     = "0.0.0.0/0"
 }
+
+variable "target_resource_id" {
+  description = "OCID of the compute instance to connect to via bastion"
+  type = string
+  
+}
