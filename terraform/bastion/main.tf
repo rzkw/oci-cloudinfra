@@ -20,7 +20,7 @@ resource "oci_bastion_session" "managed_ssh" {
 
   target_resource_details {
     session_type                               = "MANAGED_SSH"
-    target_resource_id                         = 
+    target_resource_id                         = var.target_resource_id
     target_resource_operating_system_user_name = "ubuntu"
     target_resource_port                       = 22
   }
