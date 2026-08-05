@@ -5,15 +5,14 @@ resource "oci_core_vcn" "internal" {
   display_name   = "My internal VCN"
 }
 
-# Internet Gateway
-resource "oci_core_internet_gateway" "internal" {
+# 05/08/2026 NAT Gateway
+resource "oci_core_nat_gateway" "nat-gateway" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
-  display_name   = "Internal Internet Gateway"
-  enabled        = true
+  display_name   = "NAT Gateway"
 }
 
-# Route table for dev subnet — IGW for internet
+# Route table for dev subnet — NAT for outbound internet
 resource "oci_core_route_table" "dev" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
@@ -21,7 +20,7 @@ resource "oci_core_route_table" "dev" {
   route_rules {
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_internet_gateway.internal.id
+    network_entity_id = oci_core_nat_gateway.nat-gateway.id
   }
 }
 
@@ -38,7 +37,7 @@ resource "oci_core_security_list" "internal" {
 
   ingress_security_rules {
     protocol = "6"
-    source   = "103.154.138.8/32"
+    source   = "0.0.0.0/0"
     tcp_options {
       min = 22
       max = 22
@@ -47,7 +46,7 @@ resource "oci_core_security_list" "internal" {
 
   ingress_security_rules {
     protocol = "17"
-    source   = "103.154.138.8/32"
+    source   = "0.0.0.0/0"
     udp_options {
       min = 41641
       max = 41641
@@ -55,7 +54,7 @@ resource "oci_core_security_list" "internal" {
   }
 }
 
-# Dev subnet — public (has IGW route) but no public IPs allowed
+# Dev subnet — public (has NAT route) but no public IPs allowed
 resource "oci_core_subnet" "dev" {
   vcn_id                     = oci_core_vcn.internal.id
   cidr_block                 = "172.16.0.0/24"

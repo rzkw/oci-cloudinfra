@@ -1,3 +1,5 @@
+# Reference: https://developer.hashicorp.com/terraform/language/backend/oci
+
 terraform {
   backend "oci" {
     bucket    = "tfstate"
