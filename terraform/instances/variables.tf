@@ -47,13 +47,13 @@ variable "instance_display_name" {
 variable "instance_flex_memory_in_gbs" {
   type        = number
   description = "(Updatable) The total amount of memory available to the instance, in gigabytes."
-  default     = 12
+  default     = 24
 }
 
 variable "instance_flex_ocpus" {
   type        = number
   description = "(Updatable) The total number of OCPUs available to the instance."
-  default     = 2
+  default     = 4
 }
 
 variable "instance_state" {
@@ -91,6 +91,8 @@ variable "ssh_public_keys" {
   description = "Public SSH keys to be included in the ~/.ssh/authorized_keys file for the default user on the instance. To provide multiple keys, see docs/instance_ssh_keys.adoc."
   type        = string
   default     = null
+  sensitive   = true
+
 }
 
 # networking parameters
