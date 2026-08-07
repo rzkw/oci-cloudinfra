@@ -1,22 +1,6 @@
-data "oci_identity_availability_domains" "ad" {
-  compartment_id = var.compartment_ocid
-}
-
-data "oci_core_volume_backup_policies" "default_backup_policies" {}
-
-locals {
-  ads = [
-    for i in data.oci_identity_availability_domains.ad.availability_domains : i.name
-  ]
-  backup_policies = {
-    for i in data.oci_core_volume_backup_policies.default_backup_policies.volume_backup_policies :
-    i.display_name => i.id
-  }
-}
-
 resource "oci_core_instance" "this" {
   count                               = var.instance_count
-  availability_domain                 = var.instance_ad_number != null ? element(local.ads, var.instance_ad_number - 1) : element(local.ads, count.index)
+  availability_domain                 = var.instance_ad_number 
   compartment_id                      = var.compartment_ocid
   display_name                        = var.instance_count > 1 ? "${var.instance_display_name}_${count.index + 1}" : var.instance_display_name
   shape                               = var.shape
@@ -103,12 +87,6 @@ resource "oci_core_instance" "this" {
   timeouts {
     create = "25m"
   }
-}
-
-resource "oci_core_volume_backup_policy_assignment" "boot_volume" {
-  count     = var.boot_volume_backup_policy != "disabled" ? var.instance_count : 0
-  asset_id  = oci_core_instance.this[*].boot_volume_id[count.index]
-  policy_id = local.backup_policies[var.boot_volume_backup_policy]
 }
 
 resource "oci_core_volume" "this" {
