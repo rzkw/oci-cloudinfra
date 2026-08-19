@@ -1,4 +1,4 @@
-# Reference: https://blog.victorsilva.com.uy/oci-bastion-service-terraform/
+# Reference: https://blog.victorsilva.com.uy/oci-bastion-service-terraform/; https://foggykitchen.com/2021/06/18/oci-bastion-service-terraform/
 
 resource "oci_bastion_bastion" "bastion" {
   bastion_type     = "STANDARD"
