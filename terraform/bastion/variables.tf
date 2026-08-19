@@ -10,6 +10,7 @@ variable "vcn_id" {
 
 variable "private_ip" {
   type = string
+  sensitive = true
 }
 
 variable "bastion_ssh_public_key_path" {
@@ -22,10 +23,12 @@ variable "region" {
   description = "region where you have OCI tenancy"
   type        = string
   default     = "ap-melbourne-1"
+  sensitive = true
 }
 
 variable "target_subnet_id" {
   type = string
+  sensitive = true
 }
 
 variable "client_cidr_block_allow_list" {
@@ -35,6 +38,6 @@ variable "client_cidr_block_allow_list" {
 
 variable "target_resource_id" {
   description = "OCID of the compute instance to connect to via bastion"
-  type = string
-  
+  type        = string
+
 }
