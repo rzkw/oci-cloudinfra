@@ -9,7 +9,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_oci"></a> [oci](#provider\_oci) | 8.23.0 |
+| <a name="provider_oci"></a> [oci](#provider\_oci) | 8.26.0 |
 
 ## Modules
 
