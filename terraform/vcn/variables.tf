@@ -1,3 +1,12 @@
+# Required variables: compartment_ocid selects the tenancy compartment,
+# target_resource_id is the instance the bastion session connects to, and
+# bastion_public_key authenticates the managed SSH session (key_details is a
+# required argument of oci_bastion_session). client_cidr_block_allow_list
+# restricts which source IPs can open bastion sessions (default all).
+# References:
+#   https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/bastion_session
+#   https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingbastions.htm
+
 variable "compartment_ocid" {
   description = "OCID from your tenancy page"
   type        = string
