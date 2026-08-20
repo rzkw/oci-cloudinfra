@@ -11,7 +11,7 @@ resource "oci_bastion_bastion" "bastion" {
 }
 
 resource "oci_bastion_session" "managed_ssh" {
-  bastion_id   = oci_bastion_bastion.bastion
+  bastion_id   = oci_bastion_bastion.bastion.id
   display_name = "admin-ssh-session"
 
   key_details {

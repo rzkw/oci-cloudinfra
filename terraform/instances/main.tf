@@ -1,6 +1,6 @@
 resource "oci_core_instance" "this" {
   count                               = var.instance_count
-  availability_domain                 = var.instance_ad_number 
+  availability_domain                 = var.instance_ad_number
   compartment_id                      = var.compartment_ocid
   display_name                        = var.instance_count > 1 ? "${var.instance_display_name}_${count.index + 1}" : var.instance_display_name
   shape                               = var.shape
