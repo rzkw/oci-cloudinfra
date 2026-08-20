@@ -37,16 +37,21 @@ resource "oci_core_security_list" "internal" {
   }
 
   # Allow SSH from bastion private endpoint only. Reference: https://blog.victorsilva.com.uy/oci-bastion-service-terraform/
-  
-  ingress_security_rules {
-    protocol = "6"
-    source   = "${oci_bastion_bastion.bastion.private_endpoint_ip_address}"
-    source_type = "CIDR_BLOCK"
-    description = "Allow SSH from OCI Bastion private endpoint"
-    
-    tcp_options {
-      min = 22
-      max = 22
+  # Conditional on var.bastion_private_ip to break the bastion→subnet→security_list cycle
+  # and allow deploying VCN before bastion. Set var.bastion_private_ip after bastion apply.
+
+  dynamic "ingress_security_rules" {
+    for_each = var.bastion_private_ip != "" ? [1] : []
+    content {
+      protocol    = "6"
+      source      = var.bastion_private_ip
+      source_type = "CIDR_BLOCK"
+      description = "Allow SSH from OCI Bastion private endpoint"
+
+      tcp_options {
+        min = 22
+        max = 22
+      }
     }
   }
 
@@ -70,4 +75,31 @@ resource "oci_core_subnet" "dev" {
   dns_label                  = "dev"
   route_table_id             = oci_core_route_table.dev.id
   security_list_ids          = [oci_core_security_list.internal.id]
+}
+
+# Bastion — managed SSH access to instances. Reference: https://blog.victorsilva.com.uy/oci-bastion-service-terraform/
+resource "oci_bastion_bastion" "bastion" {
+  bastion_type     = "STANDARD"
+  compartment_id   = var.compartment_ocid
+  target_subnet_id = oci_core_subnet.dev.id
+  name             = "dev-bastion"
+
+  client_cidr_block_allow_list = var.client_cidr_block_allow_list
+  max_session_ttl_in_seconds   = 36000
+}
+
+resource "oci_bastion_session" "managed_ssh" {
+  bastion_id   = oci_bastion_bastion.bastion.id
+  display_name = "admin-ssh-session"
+
+  key_details {
+    public_key_content = var.bastion_public_key
+  }
+
+  target_resource_details {
+    session_type                               = "MANAGED_SSH"
+    target_resource_id                         = var.target_resource_id
+    target_resource_operating_system_user_name = "ubuntu"
+    target_resource_port                       = 22
+  }
 }
