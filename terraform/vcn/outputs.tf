@@ -17,3 +17,8 @@ output "dev_subnet_cidr" {
   description = "CIDR of the dev subnet"
   value       = oci_core_subnet.dev.cidr_block
 }
+
+output "bastion_private_endpoint_ip" {
+  description = "Bastion private endpoint IP, used in security list rules"
+  value       = oci_bastion_bastion.bastion.private_endpoint_ip_address
+}
