@@ -37,8 +37,11 @@ resource "oci_core_security_list" "internal" {
   }
 
   # Allow SSH from bastion private endpoint only. Reference: https://blog.victorsilva.com.uy/oci-bastion-service-terraform/
-  # Conditional on var.bastion_private_ip to break the bastion→subnet→security_list cycle
-  # and allow deploying VCN before bastion. Set var.bastion_private_ip after bastion apply.
+  # Single bastion, but the rule must stay conditional: referencing
+  # oci_bastion_bastion.bastion.private_endpoint_ip_address directly creates a
+  # Terraform cycle (bastion->subnet->security_list->bastion). So the source is
+  # a variable, set after the bastion apply via the bastion_private_endpoint_ip
+  # output.
 
   dynamic "ingress_security_rules" {
     for_each = var.bastion_private_ip != "" ? [1] : []
@@ -88,6 +91,9 @@ resource "oci_bastion_bastion" "bastion" {
   max_session_ttl_in_seconds   = 36000
 }
 
+# key_details.public_key_content is a Required argument of oci_bastion_session:
+# the public key authenticates the managed SSH session.
+# Ref: https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/bastion_session
 resource "oci_bastion_session" "managed_ssh" {
   bastion_id   = oci_bastion_bastion.bastion.id
   display_name = "admin-ssh-session"
