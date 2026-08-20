@@ -26,12 +26,6 @@ variable "defined_tags" {
 
 # compute instance parameters
 
-variable "instance_ad_number" {
-  description = "The availability domain number of the instance. If none is provided, it will start with AD-1 and continue in round-robin."
-  type        = number
-  default     = 1
-}
-
 variable "instance_count" {
   description = "Number of identical instances to launch from a single module."
   type        = number
