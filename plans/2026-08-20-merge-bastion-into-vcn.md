@@ -38,7 +38,7 @@ resource "oci_bastion_session" "managed_ssh" {
   display_name = "admin-ssh-session"
 
   key_details {
-    public_key_content = file(var.bastion_ssh_public_key_path)
+    public_key_content = var.bastion_public_key
   }
 
   target_resource_details {
@@ -58,10 +58,9 @@ variable "target_resource_id" {
   type        = string
 }
 
-variable "bastion_ssh_public_key_path" {
-  description = "Path to bastion SSH public key"
+variable "bastion_public_key" {
+  description = "Public SSH key content used by the managed SSH session"
   type        = string
-  default     = "~/.ssh/bastion_key.pub"
 }
 
 variable "client_cidr_block_allow_list" {
@@ -86,23 +85,20 @@ output "bastion_private_endpoint_ip" {
 git rm -r terraform/bastion/
 ```
 
-### 5. Fix `availability_domain` in `terraform/instances/main.tf`
+### 5. Remove `instance_ad_number` from `terraform/instances/`
 
-Line 3: `var.instance_ad_number` is a number, but `availability_domain` expects a string. This was introduced in origin/main's rebased commits. Fix:
+Single AD in use. Remove the variable and use the first AD from the data source (fixes the number/string type bug):
 
 ```hcl
-# Before
-availability_domain = var.instance_ad_number
+# variables.tf — delete variable "instance_ad_number"
 
-# After — lookup AD name from number
+# main.tf — replace
+# availability_domain = var.instance_ad_number
+# with
 data "oci_identity_availability_domains" "ad" {
   compartment_id = var.compartment_ocid
 }
-locals {
-  ads = [for i in data.oci_identity_availability_domains.ad.availability_domains : i.name]
-}
-# then in the resource:
-availability_domain = var.instance_ad_number != null ? element(local.ads, var.instance_ad_number - 1) : element(local.ads, count.index)
+availability_domain = data.oci_identity_availability_domains.ad.availability_domains[0].name
 ```
 
 ### 6. State migration (if bastion already deployed)
@@ -146,9 +142,17 @@ Expected: 2 new resources to add (`oci_bastion_bastion.bastion`, `oci_bastion_se
 
 ### CI checks
 
-- `lint.yml` validates vcn + instances — both must pass
+- `lint.yml` — add `terraform-plan` job that runs `terraform init && terraform plan` for `vcn` and `instances` using OCI API credentials from GitHub secrets (`OCI_TENANCY_OCID`, `OCI_USER_OCID`, `OCI_FINGERPRINT`, `OCI_PRIVATE_KEY`, `OCI_REGION`). Requires CI user with read access to state bucket + VCN compartment. Fails the PR if plan exits non-zero or plans destroy of unremoved resources.
 - `terraform-scan.yml` Checkov scan on all of `terraform/` — no new violations
 - `terraform-docs.yml` auto-generates README — verify bastion resources appear in VCN docs
+
+### Before deployment (budget check, per AGENTS.md)
+
+Before `terraform apply` in `vcn`:
+
+1. `pricing_search_name("Compute", "USD", require_priced=True)` — estimate bastion + instance cost
+2. Compare against the $1/month budget in `terraform/budget/`
+3. Only proceed if estimated costs are within budget
 
 ## Dropped
 
