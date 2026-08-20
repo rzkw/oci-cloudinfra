@@ -25,7 +25,7 @@ jobs:
         with:
           find-dir: terraform/
           output-file: README.md
-          output-method: replace
+          output-method: inject
           git-push: false
 
       - name: Assemble docs into root README
