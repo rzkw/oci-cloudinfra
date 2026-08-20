@@ -49,6 +49,29 @@ PR: #72 (plan), this PR (implementation)
 
 These require a follow-up PR; the merged plan covers all of them.
 
+## Follow-up fixes (commits `c066e2d` → `978e158`)
+
+Addressed PR #73 review comments and CI failures:
+
+- **Review (main.tf):** kept the `dynamic` rule — direct bastion-IP reference
+  fails validate with a cycle (`bastion → subnet → security_list → bastion`),
+  reproduced in an isolated module. Added comments explaining the cycle and
+  that `key_details.public_key_content` is Required for `oci_bastion_session`.
+- **Review (README):** added a one-sentence VCN description above the
+  `BEGIN_TF_DOCS` marker; CI's `output-method: replace` kept deleting it, so the
+  workflow now uses `inject` (`059b81a`), which only rewrites the marked block.
+- **Review (variables.tf):** added a top-of-file comment explaining why the
+  required vars exist, with provider/bastion doc references.
+- **CI fmt:** `terraform fmt -check -recursive terraform/` failed on
+  pre-existing formatting in `terraform/bastion/variables.tf` and
+  `terraform/instances/main.tf`; both reformatted (`978e158`).
+- **Legacy bastion module:** fixed `bastion_id = oci_bastion_bastion.bastion`
+  → `.id` (same bug as step 1) so the pre-commit `terraform_validate` hook
+  passes. Its remaining `oci_core_instance.this` reference is fixed by plan
+  step 4 (delete `terraform/bastion/`).
+
+All CI checks (Lint, Terraform Docs, Security Scan) now pass.
+
 ## References
 
 - Plan: `plans/2026-08-20-merge-bastion-into-vcn.md`
