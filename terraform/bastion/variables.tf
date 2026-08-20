@@ -9,7 +9,7 @@ variable "vcn_id" {
 }
 
 variable "private_ip" {
-  type = string
+  type      = string
   sensitive = true
 }
 
@@ -23,11 +23,11 @@ variable "region" {
   description = "region where you have OCI tenancy"
   type        = string
   default     = "ap-melbourne-1"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "target_subnet_id" {
-  type = string
+  type      = string
   sensitive = true
 }
 
