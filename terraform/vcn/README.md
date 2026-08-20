@@ -1,7 +1,3 @@
-# VCN
-
-Private VCN for dev workloads: subnet isolation, NAT egress, and a managed OCI Bastion for SSH access to private instances.
-
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
