@@ -83,9 +83,10 @@ requirements, inputs, outputs, resources, footer.
 
 ### Plan approval & references
 
-- Never implement major plans without approval from the repo admin/code owner.
-- Major changes require the plan to be submitted for PR review before any
-  implementation.
+- **No implementation without a merged plan.** Every non-trivial change
+  (feature, refactor, infrastructure) requires a plan in `plans/` that has
+  been committed and merged via PR before any code changes begin. Plans must
+  be approved by the repo admin/code owner before implementation starts.
 - All plans and reports MUST include a **References** section citing sources
   for every design decision (libraries, services, runtime behavior, security
   controls). Acceptable sources: official product documentation, personal blogs
