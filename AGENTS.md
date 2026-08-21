@@ -25,17 +25,10 @@ Resources also available: `/terraform/style-guide` (fmt/naming) and
 - The [code-styling](https://www.terraform-best-practices.com/code-styling) page
   recommends pre-commit-terraform hooks (see Required Workflow below)
 
-Also use **OCI API tools** (`oci-identity`, `oci-networking`, `oci-compute`) to
-validate OCIDs, compartments, subnets, images, and existing resources against
-real state.
-
-**OCI Pricing MCP Server** (`uvx oracle.oci-pricing-mcp-server`):
-
-| Tool | When to use |
-|------|-------------|
-| `pricing_search_name` | Check pricing for OCI services before deployment (e.g., "Compute pricing in USD") |
-| `pricing_get_sku` | Look up specific SKU pricing |
-| `ping` | Health check |
+**OCI servers** (`oci-identity`, `oci-networking`, `oci-compute`,
+`oci-pricing`): validate OCIDs, compartments, subnets, images, and existing
+resources against real state. Pricing tools (`pricing_search_name`,
+`pricing_get_sku`, `ping`) estimate costs before deployment (AUD default).
 
 HCP Terraform workspace/run/variable tools are **not relevant** — this repo
 uses local state per root module.
@@ -101,11 +94,19 @@ requirements, inputs, outputs, resources, footer.
 
 ### Before deployment (budget check)
 
-Before applying any Terraform module, check pricing against the budget:
+Before applying any Terraform module, check pricing against the budget.
+Only the in-repo resources need costing: vcn (`terraform/vcn/`),
+instances (`terraform/instances/`), bastion (`terraform/bastion/`), and
+budget (`terraform/budget/`):
 
-1. Use `pricing_search_name("Compute", require_priced=True)` to estimate new resource costs (defaults to AUD via `OCI_PRICING_DEFAULT_CCY`)
+1. Estimate per-resource costs with `pricing_search_name(...)`
+   (defaults to AUD via `OCI_PRICING_DEFAULT_CCY`)
 2. Compare estimated costs against the $1/month budget in `terraform/budget/`
 3. Only proceed if estimated costs are within budget
+
+If the pricing MCP server is unavailable, fetch list prices from the public
+Price List API:
+https://docs.oracle.com/en-us/iaas/Content/Billing/Tasks/signingup_topic-Estimating_Costs.htm#accessing_list_pricing
 
 ### Budget verification in plans/reports
 
