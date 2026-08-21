@@ -29,19 +29,22 @@ Status: implemented on `feat/split-bastion-module`; deployment pending
 - `validate` (vcn, instances, bastion, budget) with `-backend=false`: all pass
 - CI (lint, Checkov, terraform-docs): runs on this PR
 
-## Budget comparison (PR #76)
+## Budget comparison
+
+Re-run via OCI Pricing MCP server (official `oracle/mcp`
+oci-pricing-mcp-server; `ping` → ok) against the public Price List API, USD
+list prices, per updated AGENTS.md (PR #77 review request):
 
 | Item | Cost | Source |
 |------|------|--------|
-| OCI Bastion service | $0.00 — no charge for bastions/sessions | Oracle Bastion docs |
-| VM.Standard.A1.Flex (≤4 OCPU/24 GB) | $0.00 — Always Free Arm allowance | Oracle Always Free docs |
-| NAT Gateway | $0.00 fixed; $0.045/GB processed (~$0 at dev traffic) | Oracle NAT docs |
-| **Live budget** `Dollar-Budget` | **$1.00/month cap** | `oci budgets budget list` |
+| OCI Bastion service | $0.00 — absent from public price list (no charge for bastions/sessions) | `pricing_search_name("Bastion", "USD")` → 0 items |
+| VM.Standard.A1.Flex (≤4 OCPU/24 GB) | $0.00 — Always Free Arm allowance; A1 absent from price list (closest listed shape: A2 OCPU $0.014/h) | `pricing_search_name("Compute", "USD", require_priced=True)` |
+| NAT Gateway | $0.00 fixed — absent from price list; only per-GB processing (~$0 at dev traffic) | `pricing_search_name("NAT Gateway", "USD")` → 0 items |
+| **Live budget** `Dollar-Budget` | **$1.00/month cap** | `oci budgets budget budget list` (re-verified 2026-08-21) |
 | Actual spend (2026-08-21) | $0.00 actual, $0.00 forecast | same |
 
 Estimated total $0.00/month ≤ $1.00 budget → within budget, deployment may
-proceed. Pricing MCP server unavailable this session; official Oracle pricing
-docs used instead.
+proceed.
 
 ## Deployment
 
@@ -57,3 +60,4 @@ connection_details`, replace `<privateKey>`, connect.
 - Managed SSH key propagation: https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/create-session-managed-ssh.htm
 - Bastion overview (free service): https://docs.oracle.com/en-us/iaas/Content/Bastion/Concepts/bastionoverview.htm
 - Always Free resources: https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Overview.htm
+- OCI Pricing MCP server (oracle/mcp): https://github.com/oracle/mcp/tree/main/src/oci-pricing-mcp-server
