@@ -23,7 +23,11 @@
     },
     "oci-pricing": {
       "type": "local",
-      "command": ["uvx", "oracle.oci-pricing-mcp-server"],
+      "cwd": "/home/laborant/workspace/GitHub/oracle-mcp/src/oci-pricing-mcp-server",
+      "command": ["uv", "run", "--frozen", "python", "oci-pricing-mcp-server.py"],
+      "environment": {
+        "OCI_PRICING_DEFAULT_CCY": "AUD"
+      },
       "enabled": true
     },
     "terraform-best-practices": {
