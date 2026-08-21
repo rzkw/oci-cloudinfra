@@ -103,7 +103,7 @@ requirements, inputs, outputs, resources, footer.
 
 Before applying any Terraform module, check pricing against the budget:
 
-1. Use `pricing_search_name("Compute", "USD", require_priced=True)` to estimate new resource costs
+1. Use `pricing_search_name("Compute", require_priced=True)` to estimate new resource costs (defaults to AUD via `OCI_PRICING_DEFAULT_CCY`)
 2. Compare estimated costs against the $1/month budget in `terraform/budget/`
 3. Only proceed if estimated costs are within budget
 
