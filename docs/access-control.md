@@ -50,7 +50,7 @@ Allow group 'agents' to inspect policies in tenancy
 
 The `agents` group can list and read any resource in the tenancy but can't create, modify, or delete anything. The first statement covers resources (compute, network, storage). The last three cover IAM metadata (users, groups, policies).
 
-The `agents` user authenticates with an API key — the `[agents]` profile in `~/.oci/config`.
+The `agents` user authenticates with an API key — the `[DEFAULT]` profile in `~/.oci/config`.
 
 ### `Bastion` — bastion service access
 

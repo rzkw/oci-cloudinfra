@@ -107,6 +107,18 @@ Before applying any Terraform module, check pricing against the budget:
 2. Compare estimated costs against the $1/month budget in `terraform/budget/`
 3. Only proceed if estimated costs are within budget
 
+### Budget verification in plans/reports
+
+When writing any document under `plans/` or `reports/`, verify the live
+budget against planned/completed changes:
+
+1. Estimate new-resource costs via `pricing_search_name(...)` (public API, no auth)
+2. Read the live budget:
+   `oci budgets budget budget list --compartment-id <tenancy_ocid> --all`
+   (read-only; covered by `inspect all-resources in tenancy`)
+3. State both figures in the doc — estimated cost vs. live amount — and
+   don't proceed if estimates exceed the remaining budget
+
 ### Before creating a PR (for CI and uncommitted checks)
 
 1. `terraform fmt -check -recursive terraform/`
