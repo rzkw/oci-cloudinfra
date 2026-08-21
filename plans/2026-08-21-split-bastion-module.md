@@ -25,16 +25,25 @@ Adopt the three-root-module pattern (network / compute / bastion) with
 `terraform_remote_state` data sources. No dynamic blocks; single-user,
 single-instance assumptions are explicit.
 
-## Prior art in this repo
+## Previous related PRs
 
-- Bastion first lived in vcn: PR #43 (2026-07-21), removed in PR #61
-  (Phase A, 2026-08-04) when access went Tailscale-only.
-- Own-directory era: PR #66 created `terraform/bastion/` (2026-08-05);
-  PR #67 refined it (2026-08-19). It carried vcn's backend state key and
-  needed hand-copied OCIDs.
-- Merge-back era: PR #72 approved the plan; PR #73 merged resources into vcn;
-  PR #74 finished steps 4-6 and deleted the directory.
-- Cross-module output sharing precedent: PR #46.
+- Bastion first lived in vcn: [PR #43](https://github.com/rzkw/oci-cloudinfra/pull/43)
+  (2026-07-21), removed in
+  [PR #61](https://github.com/rzkw/oci-cloudinfra/pull/61) (Phase A,
+  2026-08-04) when access went Tailscale-only.
+- Own-directory era:
+  [PR #66](https://github.com/rzkw/oci-cloudinfra/pull/66) created
+  `terraform/bastion/` (2026-08-05);
+  [PR #67](https://github.com/rzkw/oci-cloudinfra/pull/67) refined it
+  (2026-08-19). It carried vcn's backend state key and needed hand-copied
+  OCIDs.
+- Merge-back era: [PR #72](https://github.com/rzkw/oci-cloudinfra/pull/72)
+  approved the plan;
+  [PR #73](https://github.com/rzkw/oci-cloudinfra/pull/73) merged resources
+  into vcn; [PR #74](https://github.com/rzkw/oci-cloudinfra/pull/74) finished
+  steps 4-6 and deleted the directory.
+- Cross-module output sharing precedent:
+  [PR #46](https://github.com/rzkw/oci-cloudinfra/pull/46).
 
 This plan restores the PR #66/#67 layout while fixing both original defects:
 a distinct backend key, and session targeting read from instances state
