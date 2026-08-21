@@ -15,15 +15,30 @@ Merging the bastion into `terraform/vcn` created a Terraform cycle
 private endpoint IP in the security list. The shipped workaround — a dynamic
 rule gated on `var.bastion_private_ip`, set by a manual second apply — was
 never run, so no SSH ingress rule existed and managed SSH sessions
-authenticated but could not reach the instance. The flow also required copying
-the instance OCID into tfvars after every instance recreation, which fed a dead
-target OCID to a live session.
+authenticated but could not reach the instance. The flow also required
+hand-copying the instance OCID into tfvars after each recreation, feeding a
+dead target to a live session.
 
 ## Approach
 
 Adopt the three-root-module pattern (network / compute / bastion) with
 `terraform_remote_state` data sources. No dynamic blocks; single-user,
 single-instance assumptions are explicit.
+
+## Prior art in this repo
+
+- Bastion first lived in vcn: PR #43 (2026-07-21), removed in PR #61
+  (Phase A, 2026-08-04) when access went Tailscale-only.
+- Own-directory era: PR #66 created `terraform/bastion/` (2026-08-05);
+  PR #67 refined it (2026-08-19). It carried vcn's backend state key and
+  needed hand-copied OCIDs.
+- Merge-back era: PR #72 approved the plan; PR #73 merged resources into vcn;
+  PR #74 finished steps 4-6 and deleted the directory.
+- Cross-module output sharing precedent: PR #46.
+
+This plan restores the PR #66/#67 layout while fixing both original defects:
+a distinct backend key, and session targeting read from instances state
+instead of manual OCID copies.
 
 ## Changes
 
@@ -67,8 +82,8 @@ vcn → instances → bastion; destroy in reverse. No manual steps between appli
 1. `terraform fmt -check -recursive terraform/`
 2. Validate all three modules with `-backend=false`
 3. Budget check per AGENTS.md (bastion service is free; A1 instance vs $1/mo)
-4. Apply from operator laptop (tfvars + backend creds live there); run the
-   `connection_details` output verbatim; expect a shell on ubuntu@<private-ip>
+4. Apply from operator laptop; run the `connection_details` output verbatim;
+   expect a shell on ubuntu@<private-ip>
 5. CI green (lint, Checkov, terraform-docs)
 
 ## References
