@@ -29,6 +29,7 @@ State is stored in OCI Object Storage — `tfstate` bucket in namespace `axvcznt
 |--------|-----------|
 | VCN | `terraform/vcn/terraform.tfstate` |
 | Instances | `terraform/instances/terraform.tfstate` |
+| Bastion | `terraform/bastion/terraform.tfstate` |
 | Budget | `terraform/budget/terraform.tfstate` |
 
 A missing backend key defaults to `terraform.tfstate` and silently collides with other modules — every root module must set an explicit `key` in its `backend "oci"` block.
@@ -38,6 +39,7 @@ A missing backend key defaults to `terraform.tfstate` and silently collides with
 ```bash
 terraform -chdir=terraform/vcn init && terraform -chdir=terraform/vcn apply
 terraform -chdir=terraform/instances init && terraform -chdir=terraform/instances apply
+terraform -chdir=terraform/bastion init && terraform -chdir=terraform/bastion apply
 terraform -chdir=terraform/budget init && terraform -chdir=terraform/budget apply
 ```
 
