@@ -101,12 +101,15 @@ budget (`terraform/budget/`):
 
 1. Estimate per-resource costs with `pricing_search_name(...)`
    (defaults to AUD via `OCI_PRICING_DEFAULT_CCY`)
-2. Compare estimated costs against the $1/month budget in `terraform/budget/`
-3. Only proceed if estimated costs are within budget
+2. Compare estimated costs against the **live** budget — read it via the
+   read-only OCI account (`oci budgets budget budget list --compartment-id
+   <tenancy_ocid> --all`) or the Budgets API, not the local `terraform/budget/`
+   config
+3. Only proceed if estimated costs are within the live amount
 
 If the pricing MCP server is unavailable, fetch list prices from the public
 Price List API:
-https://docs.oracle.com/en-us/iaas/Content/Billing/Tasks/signingup_topic-Estimating_Costs.htm#accessing_list_pricing
+https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/
 
 ### Budget verification in plans/reports
 
