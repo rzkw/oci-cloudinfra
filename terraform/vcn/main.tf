@@ -25,7 +25,10 @@ resource "oci_core_route_table" "dev" {
   }
 }
 
-# Security list — only allow UDP 41641 inbound (Tailscale) and SSH from home
+# Security list — SSH allowed only from within the dev subnet (the bastion
+# private endpoint lives in that subnet, so its traffic sources within it).
+# Same-subnet rule pattern per
+# https://martincarstenbach.com/2021/11/12/create-an-oci-bastion-service-via-terraform/
 resource "oci_core_security_list" "internal" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
@@ -36,25 +39,15 @@ resource "oci_core_security_list" "internal" {
     protocol    = "all"
   }
 
-  # Allow SSH from bastion private endpoint only. Reference: https://blog.victorsilva.com.uy/oci-bastion-service-terraform/
-  # Single bastion, but the rule must stay conditional: referencing
-  # oci_bastion_bastion.bastion.private_endpoint_ip_address directly creates a
-  # Terraform cycle (bastion->subnet->security_list->bastion). So the source is
-  # a variable, set after the bastion apply via the bastion_private_endpoint_ip
-  # output.
+  ingress_security_rules {
+    protocol    = "6"
+    source      = var.dev_subnet_cidr
+    source_type = "CIDR_BLOCK"
+    description = "SSH from within dev subnet (bastion private endpoint)"
 
-  dynamic "ingress_security_rules" {
-    for_each = var.bastion_private_ip != "" ? [1] : []
-    content {
-      protocol    = "6"
-      source      = var.bastion_private_ip
-      source_type = "CIDR_BLOCK"
-      description = "Allow SSH from OCI Bastion private endpoint"
-
-      tcp_options {
-        min = 22
-        max = 22
-      }
+    tcp_options {
+      min = 22
+      max = 22
     }
   }
 
@@ -71,41 +64,11 @@ resource "oci_core_security_list" "internal" {
 # Dev subnet — public (has NAT route) but no public IPs allowed
 resource "oci_core_subnet" "dev" {
   vcn_id                     = oci_core_vcn.internal.id
-  cidr_block                 = "172.16.0.0/24"
+  cidr_block                 = var.dev_subnet_cidr
   compartment_id             = var.compartment_ocid
   display_name               = "dev"
   prohibit_public_ip_on_vnic = true
   dns_label                  = "dev"
   route_table_id             = oci_core_route_table.dev.id
   security_list_ids          = [oci_core_security_list.internal.id]
-}
-
-# Bastion — managed SSH access to instances. Reference: https://blog.victorsilva.com.uy/oci-bastion-service-terraform/
-resource "oci_bastion_bastion" "bastion" {
-  bastion_type     = "STANDARD"
-  compartment_id   = var.compartment_ocid
-  target_subnet_id = oci_core_subnet.dev.id
-  name             = "dev-bastion"
-
-  client_cidr_block_allow_list = var.client_cidr_block_allow_list
-  max_session_ttl_in_seconds   = 36000
-}
-
-# key_details.public_key_content is a Required argument of oci_bastion_session:
-# the public key authenticates the managed SSH session.
-# Ref: https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/bastion_session
-resource "oci_bastion_session" "managed_ssh" {
-  bastion_id   = oci_bastion_bastion.bastion.id
-  display_name = "admin-ssh-session"
-
-  key_details {
-    public_key_content = var.bastion_public_key
-  }
-
-  target_resource_details {
-    session_type                               = "MANAGED_SSH"
-    target_resource_id                         = var.target_resource_id
-    target_resource_operating_system_user_name = "ubuntu"
-    target_resource_port                       = 22
-  }
 }
