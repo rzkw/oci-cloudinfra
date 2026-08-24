@@ -43,11 +43,7 @@ via OCI CLI, 2026-08-24:
 | **Live budget** `Dollar-Budget` | **$1.00/mo cap** | **$0.00 spend, $0.00 forecast** | `oci budgets budget budget list` (ACTIVE) | Monthly reset |
 
 Estimated A$0.00/month ≤ budget → within budget, deployment may proceed.
-
-**OCI vs AWS:** the same stack on AWS — t4g.small (~US$12.26) + NAT Gateway
-(~US$32.85) + t4g.nano jump box (~US$3.02) — lists ≈ **US$48/month**, while
-the identical OCI workload costs **A$0** → roughly **US$48 saved every month**
-(AWS EC2/VPC pricing + worked comparison, see References).
+OCI vs AWS cost comparison: see root `README.md` ("Cost Comparison").
 
 ## Deployment
 
@@ -65,6 +61,3 @@ connection_details`, replace `<privateKey>`, connect.
 - Always Free resources: https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Overview.htm
 - OCI Price List API (AUD): https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/
 - List-pricing guidance: https://docs.oracle.com/en-us/iaas/Content/GSG/Tasks/signingup_topic-Estimating_Costs.htm#accessing_list_pricing
-- AWS EC2 On-Demand pricing: https://aws.amazon.com/ec2/pricing/on-demand/
-- AWS VPC pricing (NAT Gateway): https://aws.amazon.com/vpc/pricing/
-- OCI vs AWS comparison: https://github.com/jasonwilbur/oci-pricing-mcp#:~:text=AWS
