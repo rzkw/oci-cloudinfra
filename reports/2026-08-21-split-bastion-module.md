@@ -31,20 +31,23 @@ Status: implemented on `feat/split-bastion-module`; deployment pending
 
 ## Budget comparison
 
-Re-run via OCI Pricing MCP server (official `oracle/mcp`
-oci-pricing-mcp-server; `ping` → ok) against the public Price List API, USD
-list prices, per updated AGENTS.md (PR #77 review request):
+Prices in AUD (default currency per AGENTS.md), read directly from the public
+Price List API (MCP pricing tools unavailable this session); live budget read
+via OCI CLI, 2026-08-24:
 
-| Item | Cost | Source |
-|------|------|--------|
-| OCI Bastion service | $0.00 — absent from public price list (no charge for bastions/sessions) | `pricing_search_name("Bastion", "USD")` → 0 items |
-| VM.Standard.A1.Flex (≤4 OCPU/24 GB) | $0.00 — Always Free Arm allowance; A1 absent from price list (closest listed shape: A2 OCPU $0.014/h) | `pricing_search_name("Compute", "USD", require_priced=True)` |
-| NAT Gateway | $0.00 fixed — absent from price list; only per-GB processing (~$0 at dev traffic) | `pricing_search_name("NAT Gateway", "USD")` → 0 items |
-| **Live budget** `Dollar-Budget` | **$1.00/month cap** | `oci budgets budget budget list` (re-verified 2026-08-21) |
-| Actual spend (2026-08-21) | $0.00 actual, $0.00 forecast | same |
+| Item | Cost | Actual | Source | Comment |
+|------|------|--------|--------|---------|
+| Bastion STANDARD + MANAGED_SSH session | A$0.00 | n/a — not yet deployed | Price List API (no bastion SKU listed) | Service free per Bastion overview ref |
+| VM.Standard.A1.Flex ≤ 4 OCPU / 24 GB | A$0.00 | n/a | Price List API: A1 OCPU/memory dual-priced A$0 / A$0.015 per OCPU-h (B93297/B93298) | Dev shape sits inside Always Free allowance |
+| NAT Gateway | A$0.00 fixed | n/a | Price List API (no NAT SKU; APAC egress A$0 first 10 TB/mo, then A$0.0375/GB) | Dev traffic far below free allowance |
+| **Live budget** `Dollar-Budget` | **$1.00/mo cap** | **$0.00 spend, $0.00 forecast** | `oci budgets budget budget list` (ACTIVE) | Monthly reset |
 
-Estimated total $0.00/month ≤ $1.00 budget → within budget, deployment may
-proceed.
+Estimated A$0.00/month ≤ budget → within budget, deployment may proceed.
+
+**OCI vs AWS:** the same stack on AWS — t4g.small (~US$12.26) + NAT Gateway
+(~US$32.85) + t4g.nano jump box (~US$3.02) — lists ≈ **US$48/month**, while
+the identical OCI workload costs **A$0** → roughly **US$48 saved every month**
+(AWS EC2/VPC pricing + worked comparison, see References).
 
 ## Deployment
 
@@ -60,4 +63,8 @@ connection_details`, replace `<privateKey>`, connect.
 - Managed SSH key propagation: https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/create-session-managed-ssh.htm
 - Bastion overview (free service): https://docs.oracle.com/en-us/iaas/Content/Bastion/Concepts/bastionoverview.htm
 - Always Free resources: https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier_topic-Overview.htm
-- OCI Pricing MCP server (oracle/mcp): https://github.com/oracle/mcp/tree/main/src/oci-pricing-mcp-server
+- OCI Price List API (AUD): https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/
+- List-pricing guidance: https://docs.oracle.com/en-us/iaas/Content/GSG/Tasks/signingup_topic-Estimating_Costs.htm#accessing_list_pricing
+- AWS EC2 On-Demand pricing: https://aws.amazon.com/ec2/pricing/on-demand/
+- AWS VPC pricing (NAT Gateway): https://aws.amazon.com/vpc/pricing/
+- OCI vs AWS comparison: https://github.com/jasonwilbur/oci-pricing-mcp#:~:text=AWS
