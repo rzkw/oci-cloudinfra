@@ -14,19 +14,33 @@ Walkable LLC's internal dev environment on Oracle Cloud Infrastructure.
 
 ## Cost Comparison — OCI vs AWS
 
+All figures in AUD. AWS = ap-southeast-2 on-demand list prices, converted at
+1 USD = 1.3951 AUD (ECB reference via frankfurter.dev, 2026-08-21); monthly =
+hourly × 730.
+
 | Resource | AWS equivalent | OCI/mo | AWS/mo | OCI/yr | AWS/yr |
 |----------|----------------|--------|--------|--------|--------|
-| Bastion (STANDARD, MANAGED_SSH) | EC2 `t4g.nano` jump box | A$0 | US$3 | A$0 | US$36 |
-| Compute `VM.Standard.A1.Flex` (4 OCPU / 24 GB) | EC2 `t4g.small` | A$0 | US$12 | A$0 | US$147 |
-| NAT Gateway | NAT Gateway | A$0¹ | US$33 | A$0 | US$394 |
-| **Total** | | **A$0** | **≈US$48** | **A$0** | **≈US$578** |
+| VCN (+ IGW, subnets) | VPC + IGW + subnets | A$0 | A$0 | A$0 | A$0 |
+| NAT Gateway¹ | NAT Gateway + public IPv4 | A$0 | A$65.18 | A$0 | A$782.15 |
+| Compute `VM.Standard.A1.Flex` (4 OCPU / 24 GB)² | EC2 `t4g.xlarge` (4 vCPU / 16 GiB) | A$0 | A$172.72 | A$0 | A$2072.69 |
+| Bastion (STANDARD, MANAGED_SSH)³ | SSM Session Manager | A$0 | A$0 | A$0 | A$0 |
+| Budget alerts⁴ | AWS Budgets (first 2 free) | A$0 | A$0 | A$0 | A$0 |
+| **Total** | | **A$0** | **≈A$238** | **A$0** | **≈A$2855** |
 
-¹ Dev traffic stays within the free egress allowance (first 10 TB/month).
-AWS figures are us-east-1 on-demand list prices in USD; OCI uses AUD list
-pricing — Always Free allowances cover the entire stack.
-Sources: [OCI Price List API](https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/),
-[AWS EC2 pricing](https://aws.amazon.com/ec2/pricing/on-demand/),
-[AWS VPC pricing](https://aws.amazon.com/vpc/pricing/).
+¹ NAT data processing (US$0.059/GB) excluded — dev traffic negligible; row
+includes the US$0.005/hr public IPv4 charge.
+² AWS free tier does not cover t4g.xlarge (legacy allowance tops out at
+t4g.small); full on-demand rate applied.
+³ SSM Standard tier is free; OCI Bastion service and sessions are free.
+⁴ OCI budgets and alert rules are free.
+
+The entire stack sits inside OCI Always Free allowances; the equivalent AWS
+resources cost ≈ **A$238/month (~A$2855/year)**.
+Sources: [AWS Price List Bulk API](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/ap-southeast-2/index.csv)
+(+ [AmazonVPC file](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonVPC/current/ap-southeast-2/index.json));
+the account-scoped [Free Tier API](https://freetier.us-east-1.api.aws) requires
+credentials, so published free-tier limits were used instead;
+[OCI Price List API](https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/).
 
 ## Repo Layout
 
