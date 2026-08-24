@@ -12,6 +12,22 @@ Walkable LLC's internal dev environment on Oracle Cloud Infrastructure.
 | Compute Instance | A1.Flex — 4 OCPU, 24 GB RAM | Ubuntu, cloud-init bootstraps Ansible; accessed via Tailscale |
 | Budget Alert | $1/month | Email notifications at 1% threshold |
 
+## Cost Comparison — OCI vs AWS
+
+| Resource | AWS equivalent | OCI/mo | AWS/mo | OCI/yr | AWS/yr |
+|----------|----------------|--------|--------|--------|--------|
+| Bastion (STANDARD, MANAGED_SSH) | EC2 `t4g.nano` jump box | A$0 | US$3 | A$0 | US$36 |
+| Compute `VM.Standard.A1.Flex` (4 OCPU / 24 GB) | EC2 `t4g.small` | A$0 | US$12 | A$0 | US$147 |
+| NAT Gateway | NAT Gateway | A$0¹ | US$33 | A$0 | US$394 |
+| **Total** | | **A$0** | **≈US$48** | **A$0** | **≈US$578** |
+
+¹ Dev traffic stays within the free egress allowance (first 10 TB/month).
+AWS figures are us-east-1 on-demand list prices in USD; OCI uses AUD list
+pricing — Always Free allowances cover the entire stack.
+Sources: [OCI Price List API](https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/),
+[AWS EC2 pricing](https://aws.amazon.com/ec2/pricing/on-demand/),
+[AWS VPC pricing](https://aws.amazon.com/vpc/pricing/).
+
 ## Repo Layout
 
 | Path | Description |
