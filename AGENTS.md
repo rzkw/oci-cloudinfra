@@ -1,44 +1,45 @@
 # AGENTS.md — rzkw/oci-cloudinfra
 
-Infrastructure-as-code for a minimal Oracle Cloud (OCI) tenancy: VCN, compute
-instances, and budget alerts, managed with Terraform across independent root modules.
+This repo holds Terraform code for a small Oracle Cloud (OCI) setup. It builds a
+VCN, compute instances, a bastion host, and budget alerts. Each part is a
+separate Terraform module.
 
 ## MCP Tool Usage
 
-Use the **Terraform MCP servers** before writing/modifying any Terraform code.
+Before you write or change any Terraform, use the Terraform MCP servers.
 
-**HashiCorp Registry** (`terraform` server) — only these tools are relevant:
+**HashiCorp Registry** (`terraform` server) — use these tools:
 
 | Tool | When to use |
 |------|-------------|
-| `search_providers` | Find `oracle/oci` resource, data source, or guide docs |
-| `get_provider_details` | Read full provider documentation for a specific resource |
-| `get_latest_provider_version` | Check latest `oracle/oci` version; keep all 3 modules in sync |
-| `search_modules` | Discover community modules (e.g. oci-compute-instance alternatives) |
-| `get_module_details` | Read inputs, outputs, examples for a module before referencing it |
-| `get_latest_module_version` | Verify the instances remote module has a newer tagged release |
-| `search_policies` | Find Sentinel policies — useful if Checkov flags are too vague |
-| `get_policy_details` | Read full policy docs |
+| `search_providers` | Look up `oracle/oci` resource, data source, or guide docs |
+| `get_provider_details` | Read the full docs for one resource |
+| `get_latest_provider_version` | Check the latest `oracle/oci` version; keep all 4 modules in sync |
+| `search_modules` | Find community modules (for example, oci-compute-instance) |
+| `get_module_details` | Read a module's inputs, outputs, and examples before you use it |
+| `get_latest_module_version` | Check if the instances module has a newer release |
+| `search_policies` | Find Sentinel policies when Checkov flags are unclear |
+| `get_policy_details` | Read the full policy docs |
 
-Resources also available: `/terraform/style-guide` (fmt/naming) and
-`/terraform/module-development` (module structure best practices).
+You can also read `/terraform/style-guide` (format and naming) and
+`/terraform/module-development` (module structure).
 
 **Terraform Best Practices** (`terraform-best-practices` server):
-- `searchDocumentation` / `getPage` → code style, structure conventions
+- `searchDocumentation` / `getPage` — code style and structure
 - The [code-styling](https://www.terraform-best-practices.com/code-styling) page
-  covers formatting and validation conventions
+  shows formatting and validation rules
 
 **OCI servers** (`oci-identity`, `oci-networking`, `oci-compute`,
-`oci-pricing`): validate OCIDs, compartments, subnets, images, and existing
-resources against real state. Pricing tools (`pricing_search_name`,
-`pricing_get_sku`, `ping`) estimate costs before deployment (AUD default).
+`oci-pricing`): check real OCIDs, compartments, subnets, images, and resources.
+Use `pricing_search_name`, `pricing_get_sku`, and `ping` to estimate cost before
+you deploy (prices are in AUD by default).
 
-HCP Terraform workspace/run/variable tools are **not relevant** — this repo
-uses local state per root module.
+Do not use the HCP Terraform tools (workspaces, runs, variables). This repo
+keeps state in each module, not in HCP Terraform.
 
 ## Project Structure
 
-Four independent Terraform root modules — each has its own state:
+The repo has four separate Terraform modules. Each keeps its own state:
 
 | Module | Path | Purpose |
 |--------|------|---------|
@@ -47,102 +48,102 @@ Four independent Terraform root modules — each has its own state:
 | Bastion | `terraform/bastion/` | Jump host for private access |
 | Budget | `terraform/budget/` | Cost alerts (email) |
 
-Each module has its own `providers.tf`, `variables.tf`, and `.terraform.lock.hcl`.
-Each root module's `backend "oci"` block must set a distinct `key`
-(`terraform/<module>/terraform.tfstate`); a missing key defaults to
-`terraform.tfstate` and silently collides with other modules.
-Run commands per-module with `terraform -chdir=terraform/<module>`.
+Each module has its own `providers.tf`, `variables.tf`, and
+`.terraform.lock.hcl`. Each `backend "oci"` block must use a different `key`
+(`terraform/<module>/terraform.tfstate`). If you skip the `key`, it defaults to
+`terraform.tfstate` and clashes with the other modules. Run commands per module
+with `terraform -chdir=terraform/<module>`.
 
 ## Git Rules
 
-- **Never force push.** Add new commits only. `git push --force` is forbidden on any branch. Use `--force-with-lease` when necessary. If a PR review requires changes, make a new commit and push normally.
-- **Auto-assign reviewer.** Every PR must have `rzkw` assigned as reviewer. GitHub CODEOWNERS (`* @rzkw`) requests this review automatically — never remove or override it.
+- **Never force push.** Only add new commits. `git push --force` is forbidden.
+  If you must, use `--force-with-lease`. When a PR review asks for changes, add
+  a new commit and push it normally.
+- **Auto-assign reviewer.** Every PR must list `rzkw` as reviewer. CODEOWNERS
+  (`* @rzkw`) does this for you — never remove it.
 
 ## Required Workflow
 
 ### Module documentation
 
-Module docs are auto-generated on merge to `main` via
-`.github/workflows/terraform-docs.yml`. The workflow:
-1. Runs `terraform-docs/gh-actions` with `find-dir` to generate per-module READMEs
-2. Assembles each module's docs into the root `README.md` between `<!-- BEGIN_TF_DOCS <module> -->` / `<!-- END_TF_DOCS <module> -->` markers
-3. Deletes per-module READMEs and commits the root `README.md` change only
+On merge to `main`, `.github/workflows/terraform-docs.yml` builds the docs:
+1. Runs `terraform-docs/gh-actions` with `find-dir` to make a README per module
+2. Joins each module's docs into the root `README.md` between
+   `<!-- BEGIN_TF_DOCS <module> -->` and `<!-- END_TF_DOCS <module> -->`
+3. Deletes the per-module READMEs and commits only the root `README.md` change
 
-Each module has a `.terraform-docs.yml` configuring sections: header,
+Each module has a `.terraform-docs.yml` that sets the doc sections: header,
 requirements, inputs, outputs, resources, footer.
 
-### Plan approval & references
+### Plan approval and references
 
-- **No implementation without a merged plan.** Every non-trivial change
-  (feature, refactor, infrastructure) requires a plan in `plans/` that has
-  been committed and merged via PR before any code changes begin. Plans must
-  be approved by the repo admin/code owner before implementation starts.
-- All plans and reports MUST include a **References** section citing sources
-  for every design decision (libraries, services, runtime behavior, security
-  controls). Acceptable sources: official product documentation, personal blogs
-  from engineers/devs/sysadmins, and product engineering blogs. Academic papers
-  are never acceptable.
-- All plans and reports MUST stay under 500 words, **including** the References
-  section. This applies to all future documents only; existing plans/reports are
-  exempt.
-- Plans are saved under `plans/` with a dated filename.
-- Reports (after completion, during WIP, etc.) are saved under `reports/` and
-  reference the plan, PR, and commits.
+- **Write a plan before you build.** Any non-trivial change (feature, refactor,
+  or infrastructure) needs a plan in `plans/`. Commit it and merge it via PR
+  before you change code. The repo owner must approve the plan first.
+- **Add references.** Every plan and report must have a **References** section.
+  List the source for each decision (library, service, runtime behavior,
+  security control). Use official docs, engineering blogs, or sysadmin blogs.
+  Do not use academic papers.
+- **Keep it short.** Plans and reports must stay under 500 words, references
+  included. This rule applies to new documents only; old ones are exempt.
+- **Where to save.** Put plans in `plans/` with a dated name. Put reports in
+  `reports/` and link the plan, PR, and commits.
 
-### Before deployment (budget check)
+### Check budget before deploy
 
-Before applying any Terraform module, check pricing against the budget.
-Only the in-repo resources need costing: vcn (`terraform/vcn/`),
-instances (`terraform/instances/`), bastion (`terraform/bastion/`), and
-budget (`terraform/budget/`):
+Before you apply any module, check the cost against the budget. Cost only the
+resources in this repo: vcn, instances, bastion, budget.
 
-1. Estimate per-resource costs with `pricing_search_name(...)`
-   (defaults to AUD via `OCI_PRICING_DEFAULT_CCY`)
-2. Compare estimated costs against the **live** budget — read it via the
-   read-only OCI account (`oci budgets budget budget list --compartment-id
-   <tenancy_ocid> --all`) or the Budgets API, not the local `terraform/budget/`
-   config
-3. Only proceed if estimated costs are within the live amount
+1. Estimate cost per resource with `pricing_search_name(...)` (AUD by default
+   via `OCI_PRICING_DEFAULT_CCY`)
+2. Compare it to the **live** budget. Read it from the read-only OCI account
+   (`oci budgets budget budget list --compartment-id <tenancy_ocid> --all`) or
+   the Budgets API — not from the local `terraform/budget/` config
+3. Only continue if the cost fits the budget
 
-If the pricing MCP server is unavailable, fetch list prices from the public
-Price List API:
+If the pricing MCP server is down, get list prices from the public Price List
+API:
 https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/
 
-### Budget verification in plans/reports
+### Verify budget in plans and reports
 
-When writing any document under `plans/` or `reports/`, verify the live
-budget against planned/completed changes:
+When you write a plan or report, check the live budget against your changes:
 
-1. Estimate new-resource costs via `pricing_search_name(...)` (public API, no auth)
+1. Estimate the new cost with `pricing_search_name(...)` (public API, no login)
 2. Read the live budget:
    `oci budgets budget budget list --compartment-id <tenancy_ocid> --all`
-   (read-only; covered by `inspect all-resources in tenancy`)
-3. State both figures in the doc — estimated cost vs. live amount — and
-   don't proceed if estimates exceed the remaining budget
+   (read-only)
+3. Show both numbers — estimated cost and live budget — in the doc. Do not
+   proceed if the cost exceeds the remaining budget
 
-### Before creating a PR (for CI and uncommitted checks)
+### Before you open a PR
 
 1. `terraform fmt -check -recursive terraform/`
 2. `terraform -chdir=terraform/vcn init -backend=false && terraform -chdir=terraform/vcn validate`
-3. Repeat step 2 for `instances`, `bastion`, and `budget`
+3. Run step 2 for `instances`, `bastion`, and `budget`
 
-**Do not push code that hasn't passed fmt + validate.** Fix errors before
-creating a PR.
+Do not push code that fails fmt or validate. Fix the errors first.
 
 ## CI/CD
 
-- `.github/workflows/lint.yml` — runs on PR to `main`: fmt, validate
-- `.github/workflows/terraform-scan.yml` — Checkov scan on push/PR to main + weekly
-- `.github/workflows/terraform-docs.yml` — generates module docs on push to `main`, assembles into root `README.md`
-- `.github/dependabot.yml` — weekly terraform + GitHub Actions updates
-- `.github/CODEOWNERS` — `* @rzkw`, all PRs need review
+- `.github/workflows/lint.yml` — on PR to `main`: fmt and validate
+- `.github/workflows/terraform-scan.yml` — Checkov scan on push/PR to `main`,
+  plus weekly
+- `.github/workflows/terraform-docs.yml` — on push to `main`: builds module
+  docs into root `README.md`
+- `.github/dependabot.yml` — weekly updates for Terraform and GitHub Actions
+- `.github/CODEOWNERS` — `* @rzkw`, so every PR needs review
 
 ## Notes
 
-- **No `.tfvars` committed** (gitignored). Values come from environment or CI.
-- **VCN access**: SSH + Tailscale (UDP 41641) from home IP only.
-- Docs in `docs/` cover architecture, security, IAM, and cost.
+- **No `.tfvars` committed.** They are gitignored. Values come from the
+  environment or CI.
+- **VCN access:** SSH and Tailscale (UDP 41641) from the home IP only.
+- The `docs/` folder covers architecture, security, IAM, and cost.
 
 ## Commit signing
 
-All commits must be signed with SSH key `~/.ssh/agent-gh-signing`. Signing is configured globally (`gpg.format = ssh`, `user.signingkey = ~/.ssh/agent-gh-signing.pub`, `commit.gpgsign = true`). Verify with `git log --show-signature -1` before pushing.
+Sign every commit with the SSH key `~/.ssh/agent-gh-signing`. Signing is set
+globally (`gpg.format = ssh`, `user.signingkey = ~/.ssh/agent-gh-signing.pub`,
+`commit.gpgsign = true`). Before you push, check with
+`git log --show-signature -1`.
