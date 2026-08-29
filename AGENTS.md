@@ -40,7 +40,7 @@ Three independent Terraform root modules — each has its own state:
 | Module | Path | Purpose |
 |--------|------|---------|
 | VCN | `terraform/vcn/` | VCN, subnets, routing, security lists |
-| Instances | `terraform/instances/` | Compute (A1.Flex), cloud-init, block volumes |
+| Instances | `terraform/instances/` | Compute (A1.Flex), cloud-init |
 | Budget | `terraform/budget/` | Cost alerts (email) |
 
 Each module has its own `providers.tf`, `variables.tf`, and `.terraform.lock.hcl`.
@@ -140,13 +140,6 @@ creating a PR.
 - `.github/dependabot.yml` — weekly terraform + GitHub Actions updates
 - `.github/CODEOWNERS` — `* @rzkw`, all PRs need review
 
-## Known Issues (actively being worked on)
-
-- **Provider version drift**: `vcn` and `budget` pin `oracle/oci ~> 8.20.0`,
-  `instances` pins `~> 8.2.0`. Being unified.
-- **Remote module pinning**: Instances module uses git commit hash
-  (`b19dbe0`) instead of a semver tag. Being migrated.
-
 ## Notes
 
 - **No `.tfvars` committed** (gitignored). Values come from environment or CI.
@@ -155,4 +148,4 @@ creating a PR.
 
 ## Commit signing
 
-All commits must be signed with SSH key `~/.ssh/agent-gh-signing`. [PERSON_NAME] is configured globally (`gpg.format = ssh`, `user.signingkey = ~/.ssh/agent-gh-signing.pub`, `commit.gpgsign = true`). Verify with `git log --show-signature -1` before pushing.
+All commits must be signed with SSH key `~/.ssh/agent-gh-signing`. Signing is configured globally (`gpg.format = ssh`, `user.signingkey = ~/.ssh/agent-gh-signing.pub`, `commit.gpgsign = true`). Verify with `git log --show-signature -1` before pushing.
