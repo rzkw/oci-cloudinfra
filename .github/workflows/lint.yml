@@ -41,4 +41,14 @@ jobs:
         run: |
           terraform init -backend=false
           terraform validate
+      - name: Init and validate bastion
+        working-directory: terraform/bastion
+        run: |
+          terraform init -backend=false
+          terraform validate
+      - name: Init and validate budget
+        working-directory: terraform/budget
+        run: |
+          terraform init -backend=false
+          terraform validate
 
