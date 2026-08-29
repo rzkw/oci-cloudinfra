@@ -26,10 +26,10 @@ variable "defined_tags" {
 
 # compute instance parameters
 
-variable "instance_count" {
-  description = "Number of identical instances to launch from a single module."
-  type        = number
-  default     = 1
+variable "availability_domain" {
+  description = "The availability domain to launch the instance in."
+  type        = string
+  default     = "KfOu:AP-MELBOURNE-1-AD-1"
 }
 
 variable "instance_display_name" {
@@ -97,19 +97,12 @@ variable "public_ip" {
   default     = "NONE"
 }
 
-variable "subnet_ocids" {
+variable "subnet_ocid" {
   description = "OCID of subnet to create instance in"
-  type        = list(string)
-  #  default     = null
+  type        = string
 }
 
 # storage parameters
-
-variable "block_storage_sizes_in_gbs" {
-  description = "Sizes of volumes to create and attach to each instance."
-  type        = list(number)
-  default     = []
-}
 
 variable "boot_volume_size_in_gbs" {
   description = "The size of the boot volume in GBs."
