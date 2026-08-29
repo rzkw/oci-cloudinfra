@@ -1,5 +1,8 @@
 # AGENTS.md — rzkw/oci-cloudinfra
 
+Infrastructure-as-code for a minimal Oracle Cloud (OCI) tenancy: VCN, compute
+instances, and budget alerts, managed with Terraform across independent root modules.
+
 ## MCP Tool Usage
 
 Use the **Terraform MCP servers** before writing/modifying any Terraform code.
@@ -23,7 +26,7 @@ Resources also available: `/terraform/style-guide` (fmt/naming) and
 **Terraform Best Practices** (`terraform-best-practices` server):
 - `searchDocumentation` / `getPage` → code style, structure conventions
 - The [code-styling](https://www.terraform-best-practices.com/code-styling) page
-  recommends pre-commit-terraform hooks (see Required Workflow below)
+  covers formatting and validation conventions
 
 **OCI servers** (`oci-identity`, `oci-networking`, `oci-compute`,
 `oci-pricing`): validate OCIDs, compartments, subnets, images, and existing
@@ -35,12 +38,13 @@ uses local state per root module.
 
 ## Project Structure
 
-Three independent Terraform root modules — each has its own state:
+Four independent Terraform root modules — each has its own state:
 
 | Module | Path | Purpose |
 |--------|------|---------|
 | VCN | `terraform/vcn/` | VCN, subnets, routing, security lists |
 | Instances | `terraform/instances/` | Compute (A1.Flex), cloud-init |
+| Bastion | `terraform/bastion/` | Jump host for private access |
 | Budget | `terraform/budget/` | Cost alerts (email) |
 
 Each module has its own `providers.tf`, `variables.tf`, and `.terraform.lock.hcl`.
@@ -56,14 +60,7 @@ Run commands per-module with `terraform -chdir=terraform/<module>`.
 
 ## Required Workflow
 
-### Pre-commit hooks (required)
-
-Repo includes a `.pre-commit-config.yaml` — install hooks with `pre-commit install`
-so every commit runs formatting and validation automatically.
-Follows [Terraform Best Practices](https://www.terraform-best-practices.com/code-styling)
-recommendations.
-
-Hooks: `terraform_fmt`, `terraform_validate`.
+### Module documentation
 
 Module docs are auto-generated on merge to `main` via
 `.github/workflows/terraform-docs.yml`. The workflow:
@@ -127,7 +124,7 @@ budget against planned/completed changes:
 
 1. `terraform fmt -check -recursive terraform/`
 2. `terraform -chdir=terraform/vcn init -backend=false && terraform -chdir=terraform/vcn validate`
-3. Repeat step 2 for `instances` and `budget`
+3. Repeat step 2 for `instances`, `bastion`, and `budget`
 
 **Do not push code that hasn't passed fmt + validate.** Fix errors before
 creating a PR.
