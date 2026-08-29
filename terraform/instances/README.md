@@ -1,3 +1,7 @@
+# Instances
+
+Single A1.Flex compute instance with its boot volume: cloud-init bootstraps Ansible, Tailscale for private access. Reads subnet OCID from vcn state via `terraform_remote_state`.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 

@@ -1,3 +1,7 @@
+# Budget
+
+Monthly OCI cost budget and alert rules (forecast + actual) for the tenancy.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
