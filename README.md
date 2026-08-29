@@ -35,12 +35,7 @@ t4g.small); full on-demand rate applied.
 ⁴ OCI budgets and alert rules are free.
 
 The entire stack sits inside OCI Always Free allowances; the equivalent AWS
-resources cost ≈ **A$238/month (~A$2855/year)**.
-Sources: [AWS Price List Bulk API](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/ap-southeast-2/index.csv)
-(+ [AmazonVPC file](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonVPC/current/ap-southeast-2/index.json));
-the account-scoped [Free Tier API](https://freetier.us-east-1.api.aws) requires
-credentials, so published free-tier limits were used instead;
-[OCI Price List API](https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/).
+resources cost ≈ **A$238/month (~A$2855/year)**. ⁵
 
 ## Repo Layout
 
@@ -89,3 +84,9 @@ Module documentation was verified against live OCI state using:
 - **OCI Identity MCP** — tenancy `hello17`, compartment `Comp-1`, AD `KfOu:AP-MELBOURNE-1-AD-1` confirmed
 - **OCI Compute MCP** — image OCID and instance shapes confirmed
 - **OCI Networking MCP** — VCN `172.16.0.0/20`, subnet `172.16.0.0/24`, security lists confirmed
+
+⁵ Sources: [AWS Price List Bulk API](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/ap-southeast-2/index.csv)
+(+ [AmazonVPC file](https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonVPC/current/ap-southeast-2/index.json));
+the account-scoped [Free Tier API](https://freetier.us-east-1.api.aws) requires
+credentials, so published free-tier limits were used instead;
+[OCI Price List API](https://apexapps.oracle.com/pls/apex/cetools/api/v1/products/).
