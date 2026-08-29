@@ -52,3 +52,20 @@ jobs:
           terraform init -backend=false
           terraform validate
 
+  terraform-docs:
+    name: terraform-docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2.21.0
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@v7
+      - name: Check module docs are up to date
+        uses: terraform-docs/gh-actions@v1
+        with:
+          find-dir: terraform/
+          output-file: README.md
+          output-method: check
+          fail-on-diff: true
+
