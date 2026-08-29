@@ -3,7 +3,7 @@
   "mcp": {
     "terraform": {
       "type": "local",
-      "command": ["docker", "run", "-i", "--rm", "hashicorp/terraform-mcp-server:1.0.0"],
+      "command": ["docker", "run", "-i", "--rm", "hashicorp/terraform-mcp-server:1.2.0"],
       "enabled": true
     },
     "oci-compute": {
