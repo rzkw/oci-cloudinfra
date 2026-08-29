@@ -38,13 +38,13 @@ variable "instance_display_name" {
   default     = "VM"
 }
 
-variable "instance_flex_memory_in_gbs" {
+variable "memory_in_gbs" {
   type        = number
   description = "(Updatable) The total amount of memory available to the instance, in gigabytes."
   default     = 24
 }
 
-variable "instance_flex_ocpus" {
+variable "ocpus" {
   type        = number
   description = "(Updatable) The total number of OCPUs available to the instance."
   default     = 4
@@ -68,15 +68,9 @@ variable "shape" {
 }
 
 variable "source_ocid" {
-  description = "The OCID of an image or a boot volume to use, depending on the value of source_type."
+  description = "The OCID of an image to use for the instance."
   type        = string
   default     = "ocid1.image.oc1.ap-melbourne-1.aaaaaaaawr3xahtf7zbw6uov2yawyerlfkm246qbtrku7cvcel7enu66y5tq"
-}
-
-variable "source_type" {
-  description = "The source type for the instance."
-  type        = string
-  default     = "image"
 }
 
 # operating system parameters
