@@ -49,7 +49,7 @@ resource "oci_bastion_session" "managed_ssh" {
 
   target_resource_details {
     session_type                               = "MANAGED_SSH"
-    target_resource_id                         = data.terraform_remote_state.instances.outputs.instance_ocids[0]
+    target_resource_id                         = data.terraform_remote_state.instances.outputs.instance_ocid
     target_resource_operating_system_user_name = "ubuntu"
     target_resource_port                       = 22
   }
