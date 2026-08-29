@@ -84,7 +84,7 @@ No `.tfvars` committed. Set variables via environment or CLI flags. See [docs/ge
 ## Verification
 
 Module documentation was verified against live OCI state using:
-- **Terraform Registry** (`oracle/oci` 8.24.0) — all 15 resource types and data sources confirmed, attributes compatible
+- **Terraform Registry** (`oracle/oci` 8.29.0) — all 15 resource types and data sources confirmed, attributes compatible
 - **Terraform Best Practices** — README structure and naming conventions validated
 - **OCI Identity MCP** — tenancy `hello17`, compartment `Comp-1`, AD `KfOu:AP-MELBOURNE-1-AD-1` confirmed
 - **OCI Compute MCP** — image OCID and instance shapes confirmed
