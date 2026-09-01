@@ -30,7 +30,7 @@ resource "oci_bastion_bastion" "bastion" {
   name             = "dev-bastion"
 
   client_cidr_block_allow_list = var.client_cidr_block_allow_list
-  max_session_ttl_in_seconds   = 36000
+  max_session_ttl_in_seconds   = 10800
 }
 
 # Managed SSH session targeting the instance from instances module state.
