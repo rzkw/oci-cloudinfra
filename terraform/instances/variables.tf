@@ -112,8 +112,8 @@ variable "tailscale_auth_key" {
   sensitive   = true
 }
 
-variable "user_data_path" {
-  description = "Path to the cloud-init user_data script"
+variable "vault_password" {
+  description = "Ansible vault password for cloud-init provisioning"
   type        = string
-  default     = "user-data.yaml"
+  sensitive   = true
 }

@@ -4,9 +4,12 @@ package_update: true
 package_upgrade: true
 packages:
   - git
+bootcmd:
+  - "curl -s http://169.254.169.254/opc/v1/instance/metadata/vault_password > /root/.vault_pass"
 ansible:
   package_name: ansible-core
   install_method: pip
   pull:
     - url: "https://github.com/rzkw/ansible.git"
       playbook_names: [playbooks/server.yml]
+      pull_args: "--vault-password-file=/root/.vault_pass"

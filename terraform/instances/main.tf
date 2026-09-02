@@ -44,9 +44,10 @@ resource "oci_core_instance" "this" {
   }
 
   metadata = {
-    ssh_authorized_keys = var.ssh_public_keys != null ? var.ssh_public_keys : ""
-    user_data           = var.user_data_path != null ? base64encode(file(var.user_data_path)) : null
+    ssh_authorized_keys = var.ssh_public_keys
+    user_data           = base64encode(file("${path.module}/../../user-data.yaml"))
     tailscale_auth_key  = var.tailscale_auth_key
+    vault_password      = var.vault_password
   }
 
   source_details {
