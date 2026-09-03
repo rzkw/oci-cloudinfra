@@ -2,11 +2,5 @@
 ssh_pwauth: false
 package_update: true
 package_upgrade: true
-packages:
-  - git
-ansible:
-  package_name: ansible-core
-  install_method: pip
-  pull:
-    - url: "https://github.com/rzkw/ansible.git"
-      playbook_names: [playbooks/server.yml]
+runcmd: 
+  - curl -s "https://github.com/rzkw/oci-cloudinfra.git" | bash
