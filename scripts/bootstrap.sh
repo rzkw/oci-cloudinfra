@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install Ansible
-sudo apt-get install -y ansible-core
+sudo apt-get install -y ansible
 # Clone your Ansible repository
 git clone https://github.com/rzkw/ansible /home/ubuntu/ansible
 # Run your initial Ansible playbook
