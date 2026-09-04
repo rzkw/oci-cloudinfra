@@ -3,10 +3,5 @@
 ssh_pwauth: false
 package_update: true
 package_upgrade: true
-ansible:
-  package_name: ansible-core
-  install_method: pip
-  pull:
-    - url: "https://github.com/rzkw/ansible.git"
 runcmd: 
   - curl -sSf "https://github.com/rzkw/oci-cloudinfra/blob/main/scripts/bootstrap.sh" | bash
