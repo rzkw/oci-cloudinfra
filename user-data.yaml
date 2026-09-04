@@ -1,6 +1,7 @@
 #cloud-config
+# curl: silent, show error, fail fast with no output
 ssh_pwauth: false
 package_update: true
 package_upgrade: true
 runcmd: 
-  - curl -s "https://github.com/rzkw/oci-cloudinfra.git" | bash
+  - curl -sSf "https://github.com/rzkw/oci-cloudinfra.git" | bash
