@@ -1,0 +1,9 @@
+formatter: markdown table
+sections:
+  show:
+    - header
+    - requirements
+    - inputs
+    - outputs
+    - resources
+    - footer
