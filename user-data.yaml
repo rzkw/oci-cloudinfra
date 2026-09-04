@@ -4,4 +4,4 @@ ssh_pwauth: false
 package_update: true
 package_upgrade: true
 runcmd: 
-  - curl -sSf "https://github.com/rzkw/oci-cloudinfra.git" | bash
+  - curl -sSf "https://github.com/rzkw/oci-cloudinfra/blob/main/scripts/bootstrap.sh" | bash
