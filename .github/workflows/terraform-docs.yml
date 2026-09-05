@@ -13,7 +13,7 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@v2.21.0
+        uses: step-security/harden-runner@v2.21.1
         with:
           egress-policy: audit
       - uses: actions/checkout@v7
