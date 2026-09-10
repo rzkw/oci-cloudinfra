@@ -54,6 +54,7 @@ resource "oci_core_security_list" "internal" {
   ingress_security_rules {
     protocol = "17"
     source   = "0.0.0.0/0"
+    stateless = true
     udp_options {
       min = 41641
       max = 41641
