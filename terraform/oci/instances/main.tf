@@ -39,7 +39,7 @@ resource "oci_core_instance" "this" {
   }
 
   create_vnic_details {
-    assign_public_ip = var.public_ip != "NONE"
+    assign_public_ip = var.public_ip
     subnet_id        = var.subnet_ocid
   }
 
