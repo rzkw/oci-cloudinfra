@@ -5,15 +5,19 @@ resource "oci_core_vcn" "internal" {
   display_name   = "My internal VCN"
 }
 
-# 05/08/2026 Changed to NAT Gateway. Ref: https://foggykitchen.com/2018/11/05/oci-nat-gateway-terraform/
-
-resource "oci_core_nat_gateway" "nat-gateway" {
-  compartment_id = var.compartment_ocid
-  vcn_id         = oci_core_vcn.internal.id
-  display_name   = "NAT Gateway"
+# Dev subnet — public IP (10/09/2026)
+resource "oci_core_subnet" "dev" {
+  vcn_id                     = oci_core_vcn.internal.id
+  cidr_block                 = var.dev_subnet_cidr
+  compartment_id             = var.compartment_ocid
+  display_name               = "dev"
+  prohibit_public_ip_on_vnic = false # was true
+  dns_label                  = "dev"
+  route_table_id             = oci_core_route_table.dev.id
+  security_list_ids          = [oci_core_security_list.internal.id]
 }
 
-# Route table for dev subnet — NAT for outbound internet
+# Route table for dev subnet — changing to internet gateway 10/09/2026: Tailscale needs public IP for direct connection
 resource "oci_core_route_table" "dev" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
@@ -21,7 +25,7 @@ resource "oci_core_route_table" "dev" {
   route_rules {
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_nat_gateway.nat-gateway.id
+    network_entity_id = oci_core_internet_gateway.igw.id # was NAT gateway
   }
 }
 
@@ -52,8 +56,9 @@ resource "oci_core_security_list" "internal" {
   }
 
   ingress_security_rules {
-    protocol = "17"
-    source   = "0.0.0.0/0"
+    protocol  = "17"
+    source    = "0.0.0.0/0"
+    stateless = true
     udp_options {
       min = 41641
       max = 41641
@@ -61,14 +66,18 @@ resource "oci_core_security_list" "internal" {
   }
 }
 
-# Dev subnet — public (has NAT route) but no public IPs allowed
-resource "oci_core_subnet" "dev" {
-  vcn_id                     = oci_core_vcn.internal.id
-  cidr_block                 = var.dev_subnet_cidr
-  compartment_id             = var.compartment_ocid
-  display_name               = "dev"
-  prohibit_public_ip_on_vnic = true
-  dns_label                  = "dev"
-  route_table_id             = oci_core_route_table.dev.id
-  security_list_ids          = [oci_core_security_list.internal.id]
+# 05/08/2026 Changed to NAT Gateway. Ref: https://foggykitchen.com/2018/11/05/oci-nat-gateway-terraform/
+
+/* resource "oci_core_nat_gateway" "nat-gateway" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_vcn.internal.id
+  display_name   = "NAT Gateway"
+} */
+
+resource "oci_core_internet_gateway" "igw" {
+  compartment_id = var.compartment_ocid
+  vcn_id         = oci_core_vcn.internal.id
+  display_name   = "Internet Gateway"
 }
+
+

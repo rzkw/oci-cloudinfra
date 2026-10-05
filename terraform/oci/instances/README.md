@@ -14,6 +14,7 @@ Single A1.Flex compute instance with its boot volume: cloud-init bootstraps Ansi
 | Name | Type |
 |------|------|
 | [oci_core_instance.this](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_instance) | resource |
+| [oci_core_public_ip.pubip](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_public_ip) | resource |
 
 ## Inputs
 
@@ -28,7 +29,7 @@ Single A1.Flex compute instance with its boot volume: cloud-init bootstraps Ansi
 | <a name="input_instance_state"></a> [instance\_state](#input\_instance\_state) | (Updatable) The target state for the instance. Could be set to RUNNING or STOPPED. | `string` | `"RUNNING"` | no |
 | <a name="input_memory_in_gbs"></a> [memory\_in\_gbs](#input\_memory\_in\_gbs) | (Updatable) The total amount of memory available to the instance, in gigabytes. | `number` | `24` | no |
 | <a name="input_ocpus"></a> [ocpus](#input\_ocpus) | (Updatable) The total number of OCPUs available to the instance. | `number` | `4` | no |
-| <a name="input_public_ip"></a> [public\_ip](#input\_public\_ip) | Whether to create a Public IP to attach to primary vnic and which lifetime. Valid values are NONE, RESERVED or EPHEMERAL. | `string` | `"NONE"` | no |
+| <a name="input_public_ip"></a> [public\_ip](#input\_public\_ip) | Whether to create a Public IP to attach to primary vnic and which lifetime. Valid values are NONE, RESERVED or EPHEMERAL. | `string` | `"RESERVED"` | no |
 | <a name="input_region"></a> [region](#input\_region) | the oci region where resources will be created | `string` | `"ap-melbourne-1"` | no |
 | <a name="input_shape"></a> [shape](#input\_shape) | The shape of an instance. | `string` | `"VM.Standard.A1.Flex"` | no |
 | <a name="input_source_ocid"></a> [source\_ocid](#input\_source\_ocid) | The OCID of an image to use for the instance. | `string` | `"ocid1.image.oc1.ap-melbourne-1.aaaaaaaawr3xahtf7zbw6uov2yawyerlfkm246qbtrku7cvcel7enu66y5tq"` | no |

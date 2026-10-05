@@ -88,7 +88,7 @@ variable "ssh_public_keys" {
 variable "public_ip" {
   description = "Whether to create a Public IP to attach to primary vnic and which lifetime. Valid values are NONE, RESERVED or EPHEMERAL."
   type        = string
-  default     = "NONE"
+  default     = "RESERVED"
 }
 
 variable "subnet_ocid" {

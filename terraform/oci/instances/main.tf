@@ -1,3 +1,10 @@
+# This block creates a Reserved Public IP from Oracle IP Pool; https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_public_ip
+
+resource "oci_core_public_ip" "pubip" {
+  compartment_id = var.compartment_ocid
+  lifetime       = "RESERVED"
+}
+
 resource "oci_core_instance" "this" {
   availability_domain                 = var.availability_domain
   compartment_id                      = var.compartment_ocid
@@ -39,7 +46,7 @@ resource "oci_core_instance" "this" {
   }
 
   create_vnic_details {
-    assign_public_ip = var.public_ip != "NONE"
+    assign_public_ip = true
     subnet_id        = var.subnet_ocid
   }
 

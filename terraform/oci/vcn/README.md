@@ -13,7 +13,7 @@ Private VCN for dev workloads: subnet isolation, NAT egress, and same-subnet SSH
 
 | Name | Type |
 |------|------|
-| [oci_core_nat_gateway.nat-gateway](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_nat_gateway) | resource |
+| [oci_core_internet_gateway.igw](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_internet_gateway) | resource |
 | [oci_core_route_table.dev](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_route_table) | resource |
 | [oci_core_security_list.internal](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_security_list) | resource |
 | [oci_core_subnet.dev](https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_subnet) | resource |

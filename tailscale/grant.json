@@ -1,0 +1,107 @@
+{
+	// Define grants that govern access for users, groups, autogroups, tags,
+	// Tailscale IP addresses, and subnet ranges.
+	"grants": [
+		// home laptop can access server, prod, lab vms
+		{
+			"src": ["rzkw@github"],
+			"dst": ["tag:server", "tag:prod", "tag:vm"],
+			"ip":  ["22"],
+		},
+		// only rizky can access aperture
+		{
+			"src": ["rzkw@github"],
+			"dst": ["tag:svc"],
+			"ip":  ["80"],
+		},
+
+		// Allow users in "group:example" to access "tag:example", but only from
+		// devices that are running macOS and have enabled Tailscale client auto-updating.
+		// {"src": ["group:example"], "dst": ["tag:example"], "ip": ["*"], "srcPosture":["posture:autoUpdateMac"]},
+	],
+
+	// Define postures that will be applied to all rules without any specific
+	// srcPosture definition.
+	// "defaultSrcPosture": [
+	//      "posture:anyMac",
+	// ],
+
+	// Define device posture rules requiring devices to meet
+	// certain criteria to access parts of your system.
+	// "postures": {
+	//      // Require devices running macOS, a stable Tailscale
+	//      // version and auto update enabled for Tailscale.
+	//  "posture:autoUpdateMac": [
+	//      "node:os == 'macos'",
+	//      "node:tsReleaseTrack == 'stable'",
+	//      "node:tsAutoUpdate",
+	//  ],
+	//      // Require devices running macOS and a stable
+	//      // Tailscale version.
+	//  "posture:anyMac": [
+	//      "node:os == 'macos'",
+	//      "node:tsReleaseTrack == 'stable'",
+	//  ],
+	// },
+
+	// Define users and devices that can use Tailscale SSH.
+	"ssh": [
+		{
+			"src":    ["rzkw@github"],
+			"dst":    ["tag:server"],
+			"users":  ["rizky"],
+			"action": "check",
+		},
+		{
+			"src":             ["rzkw@github"],
+			"dst":             ["tag:prod"],
+			"users":           ["ubuntu"],
+			"action":          "check",
+			"recorder":        ["tag:server"],
+			"enforceRecorder": true,
+		},
+		{
+			"src":             ["rzkw@github"],
+			"dst":             ["tag:vm"],
+			"users":           ["laborant", "rizky"],
+			"action":          "check",
+			"recorder":        ["tag:server"],
+			"enforceRecorder": true,
+		},
+		// ci runner can only access service account on builder nodes
+		{
+			"src":    ["tag:ci"],
+			"dst":    ["tag:server", "tag:prod"],
+			"users":  ["ci-buildx"],
+			"action": "accept",
+		},
+	],
+
+	"tagOwners": {
+		// server
+		"tag:server": ["rzkw@github"],
+
+		// cloud
+		"tag:prod": ["rzkw@github"],
+
+		// github actions runner
+		"tag:ci": ["rzkw@github"],
+
+		// lab vms
+		"tag:vm": ["rzkw@github"],
+
+		// aperture instance
+		"tag:svc": ["rzkw@github"],
+	},
+
+	"groups": {"group:dev": ["rzkw@github"]},
+
+	// Test access rules every time they're saved.
+	// "tests": [
+	//   {
+	//       "src": "alice@example.com",
+	//       "accept": ["tag:example"],
+	//       "deny": ["100.101.102.103:443"],
+	//   },
+	// ],
+}
