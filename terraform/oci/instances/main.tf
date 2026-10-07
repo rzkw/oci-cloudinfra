@@ -1,8 +1,14 @@
 # This block creates a Reserved Public IP from Oracle IP Pool; https://registry.terraform.io/providers/oracle/oci/latest/docs/resources/core_public_ip
 
+data "oci_core_private_ips" "instance_primary" {
+  subnet_id  = var.subnet_ocid
+  ip_address = oci_core_instance.this.private_ip
+}
+
 resource "oci_core_public_ip" "pubip" {
   compartment_id = var.compartment_ocid
   lifetime       = "RESERVED"
+  private_ip_id  = data.oci_core_private_ips.instance_primary.private_ips[0].id
 }
 
 resource "oci_core_instance" "this" {
@@ -46,14 +52,15 @@ resource "oci_core_instance" "this" {
   }
 
   create_vnic_details {
-    assign_public_ip = true
+    assign_public_ip = false
     subnet_id        = var.subnet_ocid
   }
 
   metadata = {
-    ssh_authorized_keys = var.ssh_public_keys != null ? var.ssh_public_keys : ""
-    user_data           = var.user_data_path != null ? base64encode(file(var.user_data_path)) : null
-    tailscale_auth_key  = var.tailscale_auth_key
+    ssh_authorized_keys  = var.ssh_public_keys
+    agent_ssh_public_key = var.agent_ssh_public_key
+    user_data            = base64encode(file(var.user_data_path != null ? var.user_data_path : "${path.module}/../../../user-data.yaml"))
+    tailscale_auth_key   = var.tailscale_auth_key
   }
 
   source_details {
