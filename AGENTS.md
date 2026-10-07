@@ -4,6 +4,10 @@ This repo holds Terraform code for a small Oracle Cloud (OCI) setup. It builds a
 VCN, compute instances, a bastion host, and budget alerts. Each part is a
 separate Terraform module.
 
+
+## Problem solving
+When suggesting solutions, problem solving, or implementing changes - always strive for the simplest possible solution that works. Avoid overengineering, overcomplicating, building unnecessarily difficult solutions. 
+
 ## MCP Tool Usage
 
 Before you write or change any Terraform, use the Terraform MCP servers.
