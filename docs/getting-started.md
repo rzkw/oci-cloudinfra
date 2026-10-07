@@ -6,7 +6,7 @@
 - Terraform >= 1.x installed locally
 - OCI CLI configured (`oci setup config` — look for `DEFAULT` profile)
 - SSH key pair
-- Access to IP allowlisted in the security list
+- Access to the tailnet and OCI Bastion IAM policy
 
 ## 1. Clone and Configure
 
@@ -21,7 +21,7 @@ Set required variables. The VCN module needs your compartment OCID:
 export TF_VAR_compartment_ocid="ocid1.compartment.oc1..aaaaaaaa..."
 ~~~
 
-Other optional variables (instance shape, SSH keys, Tailscale auth key) — check `terraform/*/variables.tf` for the full list.
+For the instance, provide `ssh_public_keys`, `agent_ssh_public_key`, and `tailscale_auth_key`; check the module variables for all options.
 
 ## 2. Deploy
 
@@ -29,17 +29,13 @@ Modules are independent. Deploy in order:
 
 ~~~bash
 # Network first
-cd terraform/vcn
-terraform init && terraform apply
+terraform -chdir=terraform/oci/vcn init && terraform -chdir=terraform/oci/vcn apply
 
 # Compute (needs the subnet OCID from VCN output)
-cd ../instances
-terraform init && terraform apply
+terraform -chdir=terraform/oci/instances init && terraform -chdir=terraform/oci/instances apply
 
 # Budget alerts
-cd ../budget
-terraform init && terraform apply
-cd ../..
+terraform -chdir=terraform/oci/budget init && terraform -chdir=terraform/oci/budget apply
 ~~~
 
 ## 3. Connect
@@ -50,17 +46,22 @@ cd ../..
 2. Copy the SSH command from the session details.
 3. Replace `<privateKey>` with your key path and run it.
 
-**Via Tailscale:**
+**Via Tailscale (primary):**
 
-After Tailscale is installed and configured on the instance via related [Ansible playbook] (https://github.com/rzkw/ansible/blob/main/playbooks/server.yml), connect through your tailnet directly — no bastion needed.
+After cloud-init has completed the Ansible `server.yml` playbook, connect over the tailnet using SSH keys. Verify direct connectivity after deployment with `tailscale ping home` and `tailscale status`.
+
+**Via OCI Bastion (backup):**
+
+Use the Terraform-managed SSH session as `ubuntu`. Instance TCP/22 is restricted to the dev subnet and is not open to the public internet.
 
 ## 4. Ansible
 
-The instance runs a cloud-init script on first boot that installs Ansible and pulls the playbook from `rzkw/ansible`. To re-run manually:
+The instance runs cloud-init on first boot, installs the Ansible collections, and pulls `playbooks/server.yml` from `rzkw/ansible`. To re-run manually after connecting:
 
 ~~~bash
-ssh <instance>  # via bastion or tailscale
-ansible-playbook playbooks/server.yml
+ssh <instance>  # via Bastion or Tailscale
+sudo ansible-galaxy collection install -r /opt/ansible/collections/requirements.yml
+sudo ansible-pull --url https://github.com/rzkw/ansible.git --directory /opt/ansible --inventory /opt/ansible/hosts.ini --tags level1-server,patch,setup_audit,run_audit playbooks/server.yml
 ~~~
 
 ## Budget

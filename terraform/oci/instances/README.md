@@ -20,6 +20,7 @@ Single A1.Flex compute instance with its boot volume: cloud-init bootstraps Ansi
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_agent_ssh_public_key"></a> [agent\_ssh\_public\_key](#input\_agent\_ssh\_public\_key) | Agent public SSH key installed for the agent-walkllc user. | `string` | n/a | yes |
 | <a name="input_availability_domain"></a> [availability\_domain](#input\_availability\_domain) | The availability domain to launch the instance in. | `string` | `"KfOu:AP-MELBOURNE-1-AD-1"` | no |
 | <a name="input_boot_volume_size_in_gbs"></a> [boot\_volume\_size\_in\_gbs](#input\_boot\_volume\_size\_in\_gbs) | The size of the boot volume in GBs. | `number` | `50` | no |
 | <a name="input_compartment_ocid"></a> [compartment\_ocid](#input\_compartment\_ocid) | compartment ocid where to create all resources | `string` | `null` | no |
@@ -33,10 +34,10 @@ Single A1.Flex compute instance with its boot volume: cloud-init bootstraps Ansi
 | <a name="input_region"></a> [region](#input\_region) | the oci region where resources will be created | `string` | `"ap-melbourne-1"` | no |
 | <a name="input_shape"></a> [shape](#input\_shape) | The shape of an instance. | `string` | `"VM.Standard.A1.Flex"` | no |
 | <a name="input_source_ocid"></a> [source\_ocid](#input\_source\_ocid) | The OCID of an image to use for the instance. | `string` | `"ocid1.image.oc1.ap-melbourne-1.aaaaaaaawr3xahtf7zbw6uov2yawyerlfkm246qbtrku7cvcel7enu66y5tq"` | no |
-| <a name="input_ssh_public_keys"></a> [ssh\_public\_keys](#input\_ssh\_public\_keys) | Public SSH keys to be included in the ~/.ssh/authorized\_keys file for the default user on the instance. To provide multiple keys, see docs/instance\_ssh\_keys.adoc. | `string` | `null` | no |
+| <a name="input_ssh_public_keys"></a> [ssh\_public\_keys](#input\_ssh\_public\_keys) | Public SSH keys to be included in the ~/.ssh/authorized\_keys file for the default user on the instance. To provide multiple keys, see docs/instance\_ssh\_keys.adoc. | `string` | n/a | yes |
 | <a name="input_subnet_ocid"></a> [subnet\_ocid](#input\_subnet\_ocid) | OCID of subnet to create instance in | `string` | n/a | yes |
 | <a name="input_tailscale_auth_key"></a> [tailscale\_auth\_key](#input\_tailscale\_auth\_key) | Tailscale pre-authentication key for joining the tailnet | `string` | n/a | yes |
-| <a name="input_user_data_path"></a> [user\_data\_path](#input\_user\_data\_path) | Path to the cloud-init user\_data script | `string` | `"user-data.yaml"` | no |
+| <a name="input_user_data_path"></a> [user\_data\_path](#input\_user\_data\_path) | Path to the cloud-init user\_data script | `string` | `null` | no |
 
 ## Outputs
 
