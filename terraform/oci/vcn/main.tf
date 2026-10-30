@@ -78,6 +78,7 @@ resource "oci_core_internet_gateway" "igw" {
   compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.internal.id
   display_name   = "Internet Gateway"
+  route_table_id = oci_core_route_table.dev.id
 }
 
 
