@@ -1,39 +1,41 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "terraform": {
-      "type": "local",
-      "command": ["docker", "run", "-i", "--rm", "hashicorp/terraform-mcp-server:1.2.0"],
-      "enabled": true
-    },
-    "oci-compute": {
-      "type": "local",
-      "command": ["uvx", "oracle.oci-compute-mcp-server"],
-      "enabled": true
-    },
-    "oci-networking": {
-      "type": "local",
-      "command": ["uvx", "oracle.oci-networking-mcp-server"],
-      "enabled": true
-    },
-    "oci-identity": {
-      "type": "local",
-      "command": ["uvx", "oracle.oci-identity-mcp-server"],
-      "enabled": true
-    },
-    "oci-pricing": {
-      "type": "local",
-      "cwd": "/home/laborant/workspace/GitHub/oracle-mcp/src/oci-pricing-mcp-server",
-      "command": ["uv", "run", "--frozen", "python", "oci-pricing-mcp-server.py"],
-      "environment": {
-        "OCI_PRICING_DEFAULT_CCY": "AUD"
+    "servers": {
+      "terraform": {
+        "type": "local",
+        "command": ["docker", "run", "-i", "--rm", "hashicorp/terraform-mcp-server:1.2.0"],
+        "disabled": false
       },
-      "enabled": true
-    },
-    "terraform-best-practices": {
-      "type": "remote",
-      "url": "https://www.terraform-best-practices.com/~gitbook/mcp",
-      "enabled": true
+      "oci-compute": {
+        "type": "local",
+        "command": ["uvx", "oracle.oci-compute-mcp-server"],
+        "disabled": false
+      },
+      "oci-networking": {
+        "type": "local",
+        "command": ["uvx", "oracle.oci-networking-mcp-server"],
+        "disabled": false
+      },
+      "oci-identity": {
+        "type": "local",
+        "command": ["uvx", "oracle.oci-identity-mcp-server"],
+        "disabled": false
+      },
+      "oci-pricing": {
+        "type": "local",
+        "cwd": "/home/laborant/workspace/GitHub/oracle-mcp/src/oci-pricing-mcp-server",
+        "command": ["uv", "run", "--frozen", "python", "oci-pricing-mcp-server.py"],
+        "environment": {
+          "OCI_PRICING_DEFAULT_CCY": "AUD"
+        },
+        "disabled": false
+      },
+      "terraform-best-practices": {
+        "type": "remote",
+        "url": "https://www.terraform-best-practices.com/~gitbook/mcp",
+        "disabled": false
+      }
     }
   }
 }
