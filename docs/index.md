@@ -7,7 +7,7 @@ Internal dev machine running on Oracle Cloud. Consists of compute instance withi
 | Resource | Shape / CIDR | Notes |
 |----------|-------------|-------|
 | VCN | `172.16.0.0/20` | "My internal VCN", Melbourne region |
-| Dev Subnet | `172.16.0.0/24` | Private — no public IPs |
+| Dev Subnet | `172.16.0.0/24` | Internet-gateway route; instance uses its reserved public IP |
 | Internet Gateway | — | Outbound internet for the VCN |
 | Compute Instance | A1.Flex — 4 OCPU, 24 GB RAM | Ubuntu, cloud-init bootstraps Ansible; accessed via Tailscale |
 | Budget Alert | $1/month | Email notifications at 1% threshold |
@@ -50,10 +50,10 @@ Cross-domain policies connect the identity domain to the compartment. See [Acces
 ## Notes
 
 - State is stored in OCI Object Storage (`tfstate` bucket). Each module uses a distinct key — `terraform/<module>/terraform.tfstate` (see `README.md`). A missing backend key defaults to `terraform.tfstate` and collides with other modules.
-- Access is Tailscale-only — no bastion, no public port 22.
+- Primary access is through Tailscale. OCI Bastion is the backup SSH path; TCP/22 is allowed only from the dev subnet, not from the public internet.
 - `scripts/oci-subnet-setup.sh` is a legacy script that predates the Terraform config. Superseded — kept for reference only.
 - Provider version drift exists between modules (see AGENTS.md). Being unified.
-- SSH access restricted to single IP. Tailscale UDP 41641 also restricted to single IP.
+- UDP/41641 is stateless and open for direct Tailscale connectivity; the home laptop's dynamic IP is handled by Tailscale.
 
 ---
 

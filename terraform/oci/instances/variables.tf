@@ -78,9 +78,23 @@ variable "source_ocid" {
 variable "ssh_public_keys" {
   description = "Public SSH keys to be included in the ~/.ssh/authorized_keys file for the default user on the instance. To provide multiple keys, see docs/instance_ssh_keys.adoc."
   type        = string
-  default     = null
   sensitive   = true
 
+  validation {
+    condition     = length(trimspace(var.ssh_public_keys)) > 0
+    error_message = "At least one SSH public key is required for ubuntu."
+  }
+}
+
+variable "agent_ssh_public_key" {
+  description = "Agent public SSH key installed for the agent-walkllc user."
+  type        = string
+  sensitive   = true
+
+  validation {
+    condition     = length(trimspace(var.agent_ssh_public_key)) > 0
+    error_message = "An SSH public key is required for agent-walkllc."
+  }
 }
 
 # networking parameters
@@ -115,5 +129,5 @@ variable "tailscale_auth_key" {
 variable "user_data_path" {
   description = "Path to the cloud-init user_data script"
   type        = string
-  default     = "user-data.yaml"
+  default     = null
 }

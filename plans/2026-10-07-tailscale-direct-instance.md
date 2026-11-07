@@ -1,7 +1,7 @@
 # Tailscale-Ready OCI Instance Plan
 
 Date: 2026-10-07
-Status: Awaiting admin approval
+Status: Approved (PR #110)
 Repos: `rzkw/oci-cloudinfra`, `rzkw/ansible`
 
 ## Goal and design

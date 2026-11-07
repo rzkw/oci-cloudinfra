@@ -1,7 +1,11 @@
 #cloud-config
-# curl: silent, show error, fail fast with no output
 ssh_pwauth: false
 package_update: true
 package_upgrade: true
-runcmd: 
-  - curl -sSf "https://github.com/rzkw/oci-cloudinfra/blob/main/scripts/bootstrap.sh" | bash
+packages:
+  - git
+  - ansible-core
+runcmd:
+  - [git, clone, --depth, "1", --branch, main, https://github.com/rzkw/ansible.git, /opt/ansible]
+  - [ansible-galaxy, collection, install, -r, /opt/ansible/collections/requirements.yml]
+  - [ansible-pull, --url, https://github.com/rzkw/ansible.git, --directory, /opt/ansible, --checkout, main, --inventory, /opt/ansible/hosts.ini, --tags, "level1-server,patch,setup_audit,run_audit", playbooks/server.yml]

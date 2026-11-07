@@ -142,7 +142,7 @@ Do not push code that fails fmt or validate. Fix the errors first.
 
 - **No `.tfvars` committed.** They are gitignored. Values come from the
   environment or CI.
-- **VCN access:** SSH and Tailscale (UDP 41641) from the home IP only.
+- **Instance access:** TCP/22 only from the dev subnet for OCI Bastion; Tailscale UDP/41641 is stateless from any source. Do not add public TCP/22 ingress.
 - The `docs/` folder covers architecture, security, IAM, and cost.
 
 ## Commit signing
